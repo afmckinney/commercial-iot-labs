@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Intel® Commercial IoT Workshop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/main.css">
+  </head>
+  <body>
+    <header>
+      <a href="/index.html"><img src="/img/intel_logo.png" alt="Intel logo" width="52" height="35"></a>
+    </header>
+    <div class="content">
+
+      <h1>Exercise 1: Temperature Sensor and LCD</h1>
+
+      <div class="tldr">
+        Connect the Temperature sensor (Analog) and LCD display (I2C) to your Intel Edison. Write code for NodeJS using the Intel XDK IoT Edition. Measure temperature in Celsius using upm library, convert it to Fahrenheit, then display it on the LCD.
+      </div>
+
+      <ol>
+
+        <li>
+          <p>Start a new project in the Intel XDK using a blank template.</p>
+          <p>If you have an Intel XDK project already open, click on the projects drop down menu in the upper left hand corner, then select <strong>New Project</strong>.</p>
+          <p><img src="image_0.png" alt="" ></p>
+          <p>Choose <strong>Blank Template</strong> from the list of templates, then click <strong>Continue</strong>.</p>
+          <p><img src="image_1.png" alt="" ></p>
+        </li>
+
+        <li>
+          <p>Connect <strong>Grove Temperature Sensor</strong> to analog pin <strong>A0</strong> of the Grove Base Shield.</p>
+          <p>Connect <strong>Grove LCD</strong> display to one of the <strong>I2C</strong> pins.</p>
+          <p><img src="image_2.jpg" alt="" ></p>
+        </li>
+
+        <li>
+          <p>Write your own code in <span class="icon file">main.js</span> for temperature sensor and LCD display.</p>
+          <p>Below is an example of the final solution.</p>
+          <p><a href="image_4.png"><img src="image_4.png" alt="" ></a></p>
+        </li>
+        
+        <li>
+          <p>Build your application (1), upload it to Intel Edison (2), and run it (3).</p>
+          <p><img src="image_5.png" alt="" ></p>
+        </li>
+
+      </ol>
+
+      <h2>References</h2>
+
+      <ul>
+        <li><a href="https://github.com/intel-iot-devkit/upm/blob/master/examples/javascript/grovetemp.js">https://github.com/intel-iot-devkit/upm/blob/master/examples/javascript/grovetemp.js</a></li>
+        <li><a href="http://www.seeedstudio.com/wiki/Grove_-_Temperature_Sensor">http://www.seeedstudio.com/wiki/Grove<em>-</em>Temperature_Sensor</a></li>
+        <li><a href="https://github.com/intel-iot-devkit/upm/blob/master/examples/javascript/rgb-lcd.js">https://github.com/intel-iot-devkit/upm/blob/master/examples/javascript/rgb-lcd.js</a></li>
+        <li><a href="http://www.seeedstudio.com/wiki/Grove_-_LCD_RGB_Backlight">http://www.seeedstudio.com/wiki/Grove<em>-</em>LCD_RGB_Backlight</a></li>
+      </ul>
+
+      <div id="next-steps" class="callout done">
+        <p>You should now be seeing the temperature displayed on the LCD.</p>
+        <p><a href="../index.html#done-exercise1" class="link-button centered">Continue to the next step »</a></p>
+      </div>
+
+    </div><!-- end .content -->
+  </body>
+</html>

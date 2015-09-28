@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Intel® Commercial IoT Workshop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/main.css">
+  </head>
+  <body>
+    <header>
+      <a href="/index.html"><img src="/img/intel_logo.png" alt="Intel logo" width="52" height="35"></a>
+    </header>
+    <div class="content">
+
+      <h1>Edge Device Management</h1>
+
+      <p class="subtitle">Part 1: Provisioning Sensors and Actuators on a Managed Iot Network</p>
+
+      <h2>Objective</h2>
+
+      <p>By the end of this module, you should be able to:</p>
+
+      <ul>
+        <li>Setup a MongoDB database.</li>
+        <li>Write MongooseJS schema and data models.</li>
+        <li>Write Edge Device Daemon that listens for new network sensors and stores their data in the MongoDB on your Intel Iot Gateway.</li>
+        <li>Provision a sensor to the Iot Gateway Edge Network.</li>
+        <li>Provision an actuator to the Iot Gateway Edge Network.</li>
+        <li>Write a JavaScript application that listens for Restful HTTP requests and activates an edge network event.</li>
+      </ul>
+
+      <h2>Solutions to the Exercises</h2>
+
+      <p>The solutions will be made available in the labs as we move through the exercises. The instructor will announce when each solution becomes available.</p>
+
+      <h2>Set up the Proxy for the Intel Network</h2>
+
+      <p>On the Gateway device type the following:</p>
+
+      <p>Be sure to use two characters for the <code>>></code> operator.</p>
+
+<pre><code>echo "export http_proxy=’http://10.7.211.16:912/’" >> /etc/profile
+echo "export https_proxy=’http://10.7.211.16:912/’" >> /etc/profile
+npm config set proxy http://10.7.211.16:912/
+npm config set https-proxy http:1//0.7.21/1.16:912/
+source /etc/profile
+</code></pre>
+
+      <p>Also when you take the gateway back home or to your business be sure to delete the <code>http_proxy</code> from the <span class="icon file">/etc/profile</span> file.</p>
+
+      <h2>Setup the Mosquitto MQTT Broker</h2>
+
+      <p>On the gateway type of the following:</p>
+
+<pre><code>adduser mosquitto
+mosquitto
+</code></pre>
+
+      <p>This will create a user for your Mosquitto and launch the MQTT Broker named mosquitto</p>
+
+      <h2>Set up MongoDB on the Intel Iot Gateway</h2>
+
+      <ol>
+
+        <li>
+          <p>SSH into your Intel Iot Gateway and login.</p>
+          <p>If you need a reminder, look at <span class="icon bookmark"><a href="/intro/step1/index.html">Step 1: Login to your Intel Iot Gateway</a> from the Intro Module.</p>
+        </li>
+
+        <li>
+          <p>Download the MongoDB software.</p>
+          <pre><code>$ wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-3.0.6.tgz</code></pre>
+          <p><img src="image_1.png" alt=""></p>
+        </li>
+        
+        <li>
+          <p>Once downloaded, unarchive the downloaded file.</p>
+          <pre><code>$ tar zxvf mongodb-linux-x86_64-3.0.6.tgz</code></pre>
+          <p><img src="image_2.png" alt="image alt text" /></p>
+        </li>
+
+        <li>
+          <p>Add the mongodb binaries to the /usr/bin directory</p>
+          <pre><code>$ mv ./bin/* /usr/bin/</code></pre>
+        </li>
+
+        <li>
+          <p>The Intel Iot Gateway is enabled with <strong>grsecurity</strong> which by default prevents the execution of processes that are not added to a white list.</p>
+          <p>Add the MongoDM daemon (<strong>mongod)</strong> to the whitelist type:</p>
+          <pre><code>$ paxctl -Cm /usr/bin/mongod</code></pre>
+        </li>
+
+        <li>
+          <p>Start the MongoDM daemon using the "mongod" command:</p>
+          <pre><code>mongod</code></pre>
+        </li>
+
+      </ol>
+
+      <h3>References</h3>
+
+      <ul>
+        <li><p><a href="https://www.mongodb.org/">https://www.mongodb.org/</a></p></li>
+        <li><p><a href="http://docs.mongodb.org/manual/">http://docs.mongodb.org/manual/</a></p></li>
+        <li><p><a href="https://wiki.gentoo.org/wiki/Hardened/PaX_Quickstart">https://wiki.gentoo.org/wiki/Hardened/PaX_Quickstart</a></p></li>
+      </ul>
+
+
+      <h2>Write Mongoose JS Models to Access MongoDB</strong></h1>
+
+      <p>As we build our IoT Gateway system, we will need to be able to track sensors, actuators, sensor data, system events (triggers), system errors.</p>
+
+      <p>MongooseJS is an Object Data Manager that let’s you build JavaScript objects that can create, read, validate, update and remove documents from a MongoDB.</p>
+
+      <p>Read through the documentation on building Mongoose Schemas and Models at <a href="http://mongoosejs.com/docs/guide.html">http://mongoosejs.com/docs/guide.html</a> then start the exercise.</p>
+
+      <p>Be sure that you whitelist the <code>/usr/bin/node</code> executable:</p>
+
+      <pre><code>$ paxctl -Cm /usr/bin/node</code></pre>
+
+      <p>Also create a project directory.</p>
+
+      <pre><code>$ mkdir project</code></pre>
+
+      <ol>
+
+        <li>
+          <p>Install MongooseJS</p>
+          <pre><code>$ npm install mongoose</code></pre>
+        </li>
+
+        <li>
+          <p>Define a sensor schema with the following data types:</p>
+          <ul>
+            <li><p>id : String</p></li>
+            <li><p>name : String</p></li>
+            <li><p>description : String</p></li>
+            <li><p>maxfrequency : Number</p></li>
+            <li><p>active : Boolean</p></li>
+            <li><p>ioType String.</p></li>
+          </ul>
+        </li>
+
+        <li>
+          <p>Define an actuator schema with the following data types:</p>
+          <ul>
+            <li><p>id : String</p></li>
+            <li><p>name : String</p></li>
+            <li><p>description : String</p></li>
+            <li><p> maxfrequency : Number</p></li>
+            <li><p> active : Boolean</p></li>
+            <li><p> ioType String.</p></li>
+          </ul>
+        </li>
+
+        <li>
+          <p>Define sensor data schema with the following data types:</p>
+          <ul>
+            <li><p> sensor_id: String</p></li>
+            <li><p> value: Number</p></li>
+            <li><p> timestamp: Date</p></li>
+          </ul>
+        </li>
+
+        <li>
+          <p>Define a Trigger schema with the following data types:</p>
+          <ul>
+            <li><p> id: String. Holds a unique value for the iot network event</p></li>
+            <li><p> name: String. A name for the iot network event</p></li>
+            <li><p> sensor_id: String. A reference to the sensor that will trigger this event</p></li>
+            <li><p> actuator_id: String. A reference to the actuator that will be activated</p></li>
+            <li><p> condition: String. A JavaScript function that returns true or false</p></li>
+            <li><p> triggerFunc: String. A JavaScript function that is executed when the condition is true.</p></li>
+            <li><p> active: Boolean. If true this Iot Network Event can be triggered, otherwise it is inactive</p></li>
+          </ul>
+        </li>
+
+        <li>
+          <p>Define a schema for errors with the following data types:</p>
+          <ul>
+            <li><p> type: String</p></li>
+            <li><p> message: String</p></li>
+            <li><p> timestamp: Date</p></li>
+          </ul>
+        </li>
+
+      </ol>
+      
+      <h3>Additional resources</h3>
+
+      <ul>
+        <li><a href="http://mongoosejs.com/docs/guide.html">http://mongoosejs.com/docs/guide.html</a></li>
+      </ul>
+
+      <h2>Write Edge Device Daemon</h2>
+
+      <p>The purpose of this daemon is to track edge network sensors and to record their data into the MongoDB database that you setup.</p>
+
+      <ol>
+
+        <li>
+          <p>Write a NodeJS application that listens to two topics: "announcements" and “sensors/+/data”.</p>
+          <p>The first topic will be published on if a new network sensor come online in the edge network.</p>
+          <p>Notice the second topic has a “+” in it.  This is a wildcard character, and it means that any alphanumeric sequence will match it.  For the purposes of the IoT network we are designing, a sensor’s unique id should go here. So that if we want to listen to the data from a particular sensor we can listen to a topic like “sensors/temperature/data” or if we want to listen to the data from all sensors we can listen to “sensors/+/data”.</p>
+        </li>
+      
+        <li>
+          <p>When a new sensor or a new sensor value arrives, write it to the database.</p>
+        </li>
+
+      </ol>
+
+
+      <h2>Provision an Edge Sensor to the Network and Publish Sensor Data using MQTT</h2>
+
+      <p>In this exercise, you will write an MQTT server that publishes temperature data to the edge network.</p>
+
+      <p>Here are the steps in this exercise:</p>
+
+      <ol>
+        <li><p>Add the MQTT NPM package to the dependencies section of the <strong>package.json</strong> file.</p></li>
+        <li><p>Import the MQTT and the <strong>jsupm_grove</strong> packages with the <strong>require</strong> statement.</p></li>
+        <li><p>Initialize the temperature sensor.</p></li>
+        <li><p>Connect to the Mosquitto database.</p></li>
+        <li><p>Publish a sensor announcement.</p></li>
+        <li><p>Write an event handler that responses to the MQTT connect event.</p></li>
+        <li><p>Inside the event, write a <strong>setInterval</strong> function that publishes the sensor data.</p></li>
+      </ol>
+
+
+      <h2>References</h2>
+
+      <ul>
+        <li><p><a href="https://www.npmjs.com/package/mqtt">https://www.npmjs.com/package/mqtt</a></p></li>
+        <li><p><a href="https://software.intel.com/en-us/iot/hardware/sensors">https://software.intel.com/en-us/iot/hardware/sensors</a></p></li>
+        <li><p><a href="https://software.intel.com/en-us/iot/hardware/sensors/grove-temperature-sensor">https://software.intel.com/en-us/iot/hardware/sensors/grove-temperature-sensor</a></p></li>
+      </ul>
+
+
+      <h2>Controlling Edge Network Devices Actuators with Restful HTTP</h2>
+
+      <p>In this exercise, you will create a restful HTTP API to control an actuator deployed on an edge network.</p>
+
+      <p>Here are the steps in this exercise:</p>
+
+      <ol>
+        <li><p>List the actions that the actuator can performs and create a Restful API that calls each action.</p></li>
+        <li><p>Import the Express Node module, and setup the server to respond to the Restful API.</p></li>
+        <li><p>Create API Endpoints for server that correspond to the API you defined for the actuator.</p></li>
+        <li><p>Implement each API endpoint.</p></li>
+      </ol>
+
+
+      <h2>References</h2>
+
+      <ul>
+        <li><p><a href="https://www.npmjs.com/package/express">https://www.npmjs.com/package/express</a></p></li>
+        <li><p><a href="https://en.wikipedia.org/wiki/Representational_state_transfer">https://en.wikipedia.org/wiki/Representational_state_transfer</a></p></li>
+      </ul>
+
+      <div class="callout done has-goto-button">
+        <p>Ready for the next module?</p>
+        <p><a href="../index.html#done-module-edge" class="link-button centered">Go to next module »</a></p>
+      </div>
+
+    </div>
+  </body>
+</html>
