@@ -1117,9 +1117,13 @@ li .callout::before {
 
 
 /*  OVERRIDES FOR COMMERCIAL */
-
+html {
+    color: #4d4d4d;
+    background-color: #f6f7f7;
+    font-family: "OpenSansRegular","Helvetica Neue",Arial,sans-serif;
+}
 .subtitle {
-  padding: 0; 
+  padding: 0;
 }
 
 h1 + .subtitle {
@@ -1127,7 +1131,7 @@ h1 + .subtitle {
 }
 
 .has-goto-button a.link-button.centered {
-  margin-bottom: 0em; 
+  margin-bottom: 0em;
 }
 
 figure {
@@ -1142,6 +1146,15 @@ figcaption {
 
 pre > code {
   padding: 0;
+}
+
+code {
+    background: #fff;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+    color: #4d4d4d;
+    font-size: 90%;
+    padding: 0.15em 0.35em;
 }
 
 td {
