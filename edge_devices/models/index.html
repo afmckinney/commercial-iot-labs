@@ -15,99 +15,10 @@
 
       <h1>Edge Device Management</h1>
 
-      <p class="subtitle">Part 1: Provisioning Sensors and Actuators on a Managed Iot Network</p>
-
-      <h2>Objective</h2>
-
-      <p>By the end of this module, you should be able to:</p>
-
-      <ul>
-        <li>Setup a MongoDB database.</li>
-        <li>Write MongooseJS schema and data models.</li>
-        <li>Write Edge Device Daemon that listens for new network sensors and stores their data in the MongoDB on your Intel Iot Gateway.</li>
-        <li>Provision a sensor to the Iot Gateway Edge Network.</li>
-        <li>Provision an actuator to the Iot Gateway Edge Network.</li>
-        <li>Write a JavaScript application that listens for Restful HTTP requests and activates an edge network event.</li>
-      </ul>
-
-      <h2>Solutions to the Exercises</h2>
-
-      <p>The solutions will be made available in the labs as we move through the exercises. The instructor will announce when each solution becomes available.</p>
-
-      <h2>Set up the Proxy for the Intel Network</h2>
-
-      <p>On the Gateway device type the following:</p>
-
-      <p>Be sure to use two characters for the <code>>></code> operator.</p>
-
-<pre><code>echo "export http_proxy=’http://10.7.211.16:912/’" >> /etc/profile
-echo "export https_proxy=’http://10.7.211.16:912/’" >> /etc/profile
-npm config set proxy http://10.7.211.16:912/
-npm config set https-proxy http:1//0.7.21/1.16:912/
-source /etc/profile
-</code></pre>
-
-      <p>Also when you take the gateway back home or to your business be sure to delete the <code>http_proxy</code> from the <span class="icon file">/etc/profile</span> file.</p>
-
-      <h2>Setup the Mosquitto MQTT Broker</h2>
-
-      <p>On the gateway type of the following:</p>
-
-<pre><code>adduser mosquitto
-mosquitto
-</code></pre>
-
-      <p>This will create a user for your Mosquitto and launch the MQTT Broker named mosquitto</p>
-
-      <h2>Set up MongoDB on the Intel Iot Gateway</h2>
-
-      <ol>
-
-        <li>
-          <p>SSH into your Intel Iot Gateway and login.</p>
-          <p>If you need a reminder, look at <span class="icon bookmark"><a href="/intro/step1/index.html">Step 1: Login to your Intel Iot Gateway</a> from the Intro Module.</p>
-        </li>
-
-        <li>
-          <p>Download the MongoDB software.</p>
-          <pre><code>$ wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-3.0.6.tgz</code></pre>
-          <p><img src="image_1.png" alt=""></p>
-        </li>
-        
-        <li>
-          <p>Once downloaded, unarchive the downloaded file.</p>
-          <pre><code>$ tar zxvf mongodb-linux-x86_64-3.0.6.tgz</code></pre>
-          <p><img src="image_2.png" alt="image alt text" /></p>
-        </li>
-
-        <li>
-          <p>Add the mongodb binaries to the /usr/bin directory</p>
-          <pre><code>$ mv ./bin/* /usr/bin/</code></pre>
-        </li>
-
-        <li>
-          <p>The Intel Iot Gateway is enabled with <strong>grsecurity</strong> which by default prevents the execution of processes that are not added to a white list.</p>
-          <p>Add the MongoDM daemon (<strong>mongod)</strong> to the whitelist type:</p>
-          <pre><code>$ paxctl -Cm /usr/bin/mongod</code></pre>
-        </li>
-
-        <li>
-          <p>Start the MongoDM daemon using the "mongod" command:</p>
-          <pre><code>mongod</code></pre>
-        </li>
-
-      </ol>
-
-      <h3>References</h3>
-
-      <ul>
-        <li><p><a href="https://www.mongodb.org/">https://www.mongodb.org/</a></p></li>
-        <li><p><a href="http://docs.mongodb.org/manual/">http://docs.mongodb.org/manual/</a></p></li>
-        <li><p><a href="https://wiki.gentoo.org/wiki/Hardened/PaX_Quickstart">https://wiki.gentoo.org/wiki/Hardened/PaX_Quickstart</a></p></li>
-      </ul>
+      <p class="subtitle">Part 2: Creating JavaScript Models to represent the Edge Network
 
 
-      <h2>Write Mongoose JS Models to Access MongoDB</strong></h1>
+      <h2><a name="models">Write Mongoose JS Models to Access MongoDB</a></h2>
 
       <p>As we build our IoT Gateway system, we will need to be able to track sensors, actuators, sensor data, system events (triggers), system errors.</p>
 
@@ -186,14 +97,14 @@ mosquitto
         </li>
 
       </ol>
-      
+
       <h3>Additional resources</h3>
 
       <ul>
         <li><a href="http://mongoosejs.com/docs/guide.html">http://mongoosejs.com/docs/guide.html</a></li>
       </ul>
 
-      <h2>Write Edge Device Daemon</h2>
+      <h2><a name="sensorMonitor">Write Edge Device Daemon</a></h2>
 
       <p>The purpose of this daemon is to track edge network sensors and to record their data into the MongoDB database that you setup.</p>
 
@@ -204,7 +115,7 @@ mosquitto
           <p>The first topic will be published on if a new network sensor come online in the edge network.</p>
           <p>Notice the second topic has a “+” in it.  This is a wildcard character, and it means that any alphanumeric sequence will match it.  For the purposes of the IoT network we are designing, a sensor’s unique id should go here. So that if we want to listen to the data from a particular sensor we can listen to a topic like “sensors/temperature/data” or if we want to listen to the data from all sensors we can listen to “sensors/+/data”.</p>
         </li>
-      
+
         <li>
           <p>When a new sensor or a new sensor value arrives, write it to the database.</p>
         </li>
@@ -212,7 +123,7 @@ mosquitto
       </ol>
 
 
-      <h2>Provision an Edge Sensor to the Network and Publish Sensor Data using MQTT</h2>
+      <h2><a name="sensors">Provision an Edge Sensor to the Network and Publish Sensor Data using MQTT</a></h2>
 
       <p>In this exercise, you will write an MQTT server that publishes temperature data to the edge network.</p>
 
@@ -238,7 +149,7 @@ mosquitto
       </ul>
 
 
-      <h2>Controlling Edge Network Devices Actuators with Restful HTTP</h2>
+      <h2><a name="actuators">Controlling Edge Network Devices Actuators with Restful HTTP</a></h2>
 
       <p>In this exercise, you will create a restful HTTP API to control an actuator deployed on an edge network.</p>
 

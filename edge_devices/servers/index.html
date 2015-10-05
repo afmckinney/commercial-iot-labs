@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Intel® Commercial IoT Workshop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/main.css">
+  </head>
+  <body>
+    <header>
+      <a href="/index.html"><img src="/img/intel_logo.png" alt="Intel logo" width="52" height="35"></a>
+    </header>
+    <div class="content">
+
+      <h1>Edge Device Management</h1>
+
+      <p class="subtitle">Part 1: Setup a MQTT and MongoDB Server</p>
+
+      <h2><a name="servers">Setup the Mosquitto MQTT Broker</a></h2>
+
+      <p>On the gateway type the following:</p>
+
+<pre><code>$ adduser mosquitto
+$ mosquitto
+</code></pre>
+
+      <p>This will create a user for your Mosquitto and launch the MQTT Broker named mosquitto.</p>
+
+      <h2>Set up MongoDB on the Intel Iot Gateway</h2>
+
+      <ol>
+        <li>
+          <p>SSH into your Intel Iot Gateway and login.</p>
+          <p>If you need a reminder, look at <span class="icon bookmark"><a href="/intro/step1/index.html">Step 1: Login to your Intel Iot Gateway</a> from the Intro Module.</p>
+        </li>
+
+        <li>
+          <p>Download the MongoDB software.</p>
+          <pre><code>$ wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-3.0.6.tgz</code></pre>
+          <p><img src="image_1.png" alt=""></p>
+        </li>
+
+        <li>
+          <p>Once downloaded, unarchive the downloaded file.</p>
+          <pre><code>$ tar zxvf mongodb-linux-x86_64-3.0.6.tgz</code></pre>
+          <p><img src="image_2.png" alt="image alt text" /></p>
+        </li>
+
+        <li>
+          <p>Add the mongodb binaries to the /usr/bin directory</p>
+          <pre><code>$ mv ./bin/* /usr/bin/</code></pre>
+        </li>
+
+        <li>
+          <p>The Intel Iot Gateway is enabled with <strong>grsecurity</strong> which by default prevents the execution of processes that are not added to a white list.</p>
+          <p>Add the MongoDM daemon (<strong>mongod)</strong> to the whitelist type:</p>
+          <pre><code>$ paxctl -Cm /usr/bin/mongod</code></pre>
+        </li>
+
+        <li>
+          <p>The directory /data/db is the default directory that MongoDB stores its data.  Let's make sure that it has plenty of space.</p>
+          <p>Type <code>df -h</code> and notice the 28GB partition on <code>/dev/sda3</code></p>
+          <p>Create a directory named /data by typing</p>
+          <pre><code>$ mkdir /data</code></pre>
+          <p>Then create a link from /data/db to /mnt/space</p>
+          <pre><code>$ ln -s /mnt/space /data/db</code></pre>
+        </li>
+
+        <li>
+          <p>Start the MongoDM daemon using the "mongod" command:</p>
+          <pre><code>$ mongod</code></pre>
+        </li>
+
+      </ol>
+
+      <h3>References</h3>
+
+      <ul>
+        <li><p><a href="https://www.mongodb.org/">https://www.mongodb.org/</a></p></li>
+        <li><p><a href="http://docs.mongodb.org/manual/">http://docs.mongodb.org/manual/</a></p></li>
+        <li><p><a href="https://wiki.gentoo.org/wiki/Hardened/PaX_Quickstart">https://wiki.gentoo.org/wiki/Hardened/PaX_Quickstart</a></p></li>
+      </ul>
+
+      <div class="callout done has-goto-button">
+        <p>Ready for the next module?</p>
+        <p><a href="/edge_devices/models/index.html" class="link-button centered">Go to next module »</a></p>
+      </div>
+
+    </div>
+  </body>
+</html>
