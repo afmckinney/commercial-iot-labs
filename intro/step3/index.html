@@ -9,19 +9,21 @@
   </head>
   <body>
     <header>
-      <a href="/index.html"><img src="/img/intel_logo.png" alt="Intel logo" width="52" height="35"></a>
+      <a href="/index.html"><img src="/img/intel_logo.png" alt="Intel® logo" width="52" height="35"></a>
     </header>
     <div class="content">
 
-      <h1>Step 3: Login to your Intel Edison</h1>
+      <h1>Step 3: Login to your Intel® Edison</h1>
 
       <p class="subtitle">Instructions for the Intel® Galileo or Intel® Edison using Windows.</p>
 
       <div class="tldr">
-        Establish a serial connection to your IoT board using PuTTY installed on your development computer. Use Windows Device Manager to find the COM port number for the "USB Serial Port" connection.
+        Establish a serial connection to your IoT board using <span class="icon windows">PuTTY</span> installed on your development computer. Use <span class="icon windows">Device Manager</span> to find the COM port number for the "<strong>USB Serial Port</strong>" connection.
       </div>
 
       <p>If you need to configure your IoT board, you will need to remotely connect to the Intel® Edison or Intel® Galileo. Once connected to your Intel® IoT board, you have access to the Linux-based Yocto operating system running on the board.</p>
+
+      <h2>Establish serial connection using PuTTY</h2>
 
       <ol>
 
@@ -40,7 +42,7 @@
             <div class="right">
               <p><strong>Windows 8:</strong></p>
               <ol>
-                <li>Go into Windows Desktop mode.</li>
+                <li>Go into <span class="icon windows">Desktop mode</span>.</li>
                 <li>Right-click on the <span class="icon windows">Start</span> menu button.</li>
                 <li>Select "Device Manager".</li>
               </ol>
@@ -54,7 +56,7 @@
           <p><img src="image_1.png"></p>
           <div class="callout warning">
             <p><strong>Do you have the right COM number?</strong></p>
-            <p>Use the COM # shown on your computer's Device Manager. In the screenshot, it is "COM3" but your computer will have unique COM port number assignments and may be different from the screenshot.</p>
+            <p>Use the COM # shown in your <span class="icon windows">Device Manager</span>. In the screenshot, it is "COM3" but <strong>your</strong> computer will have unique COM port number assignments and may be different from the screenshot.</p>
             <p>Do <strong>not</strong> use the COM number for  "Intel Edison USB Composite Device" or "Intel Edison Virtual Com Port".</p>
           </div>
         </li>
@@ -106,9 +108,15 @@
           <p>You are now logged into your IoT board and can run shell commands!</p>
         </li>
         
+      </ol>
+
+      <h2>Configure Intel® Edison via command line</h2>
+
+      <ol>
+
         <li>
           <p>Set up your board using the <code>configure_edison</code> command with the <code>--setup</code> flag.</p>
-          <p>You will use these credentials to connect to the board if you need to re-connect the serial connection, or program the board using the Intel XDK in the next section of this workshop module.</p>
+          <p>You will use these credentials to connect to the board if you need to re-connect the serial connection, or program the board using the Intel® XDK in the next section of this workshop module.</p>
           <pre><code>configure_edison --setup</code></pre>
         </li>
       
@@ -118,7 +126,7 @@
       </li>
 
       <li>
-        <p>Then follow the prompts to give your Intel Edison device an easy to recognize name.</p>
+        <p>Then follow the prompts to give your Intel® Edison device an easy to recognize name.</p>
       </li>
 
       <li>
@@ -127,12 +135,14 @@
 
       <li>
         <p>The Intel® Edison will scan for Wi-Fi networks and display a list of available networks when finished.</p>
-        <p><img src="image_13.png">
-        <p>If you do not see any networks, try re-scanning by entering "0", or run <code>configure_edison --wifi</code>.</p>
+        <figure>
+          <img src="image_13.png">
+          <figcaption>If you do not see any networks, try re-scanning by entering "0", or run <code>configure_edison --wifi</code>.</figcaption>
+        </figure>
       </li>
 
       <li>
-        <p>Locate your Intel IoT Gateway SSIDthe network you would like to connect to in the list and enter the <strong>corresponding number</strong> in the prompt. Press Enter.</p>
+        <p>Locate your Intel® IoT Gateway SSID network you would like to connect to in the list and enter the <strong>corresponding number</strong> in the prompt. Press Enter.</p>
         <p>To confirm your entry, type "<strong>Y</strong>" and press Enter.</p>
         <figure>
           <img src="image_14.jpg">
@@ -146,7 +156,7 @@
       </li>
 
       <li>
-        <p>The Intel® Edison will attempt to make a connection to the Intel IoT Gatewaynetwork.</p>
+        <p>The Intel® Edison will attempt to make a connection to the Intel® IoT Gateway.</p>
       </li>
 
       <li>
@@ -158,7 +168,7 @@
     </ol>
 
     <div id="next-steps" class="callout done">
-      <p>You should now understand how to gain shell access to your Intel Edison. And your Intel Edison should now be connected to the Intel IoT Gateway.</p>
+      <p>You should now understand how to gain shell access to your Intel® Edison. And your Intel® Edison should now be connected to your Intel® IoT Gateway.</p>
       <p><a href="../index.html#done-step3" class="link-button centered">Continue to the next step »</a></p>
     </div>
 
