@@ -49,7 +49,7 @@ $ mosquitto
 
         <li>
           <p>Add the mongodb binaries to the /usr/bin directory</p>
-          <pre><code>$ mv ./bin/* /usr/bin/</code></pre>
+          <pre><code>$ cp ./mongodb-linux-x86_64-3.0.6/bin/* /usr/bin/</code></pre>
         </li>
 
         <li>
@@ -59,12 +59,10 @@ $ mosquitto
         </li>
 
         <li>
-          <p>The directory /data/db is the default directory that MongoDB stores its data.  Let's make sure that it has plenty of space.</p>
-          <p>Type <code>df -h</code> and notice the 28GB partition on <code>/dev/sda3</code></p>
-          <p>Create a directory named /data by typing</p>
-          <pre><code>$ mkdir /data</code></pre>
-          <p>Then create a link from /data/db to /mnt/space</p>
-          <pre><code>$ ln -s /mnt/space /data/db</code></pre>
+          <p>The directory /data/db is the default directory that MongoDB stores its data.  Let's make sure that it has plenty of space.  Be sure that the /dev/sda3 partition is mounted to /data/db</p>
+          <pre><code>$ umount /dev/sda3</code></pre>
+          <pre><code>$ mkdir -p /data/db</code></pre>
+          <pre><code>$ mount /dev/sda3 /data/db</code></pre>
         </li>
 
         <li>
