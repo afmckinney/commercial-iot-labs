@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Intel® Commercial IoT Workshop</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- Include CodeMirror CSS-->
+    <link rel="stylesheet" href="/css/codemirror.css">
+  </head>
+  <body>
+    <header>
+      <a href="/index.html"><img src="/img/intel_logo.png" alt="Intel logo" width="52" height="35"></a>
+    </header>
+    <div class="content">
+
+      <h2><a name="actuators">Controlling Edge Network Devices Actuators with Restful HTTP</a></h2>
+
+      <p>In this exercise, you will create a restful HTTP API to control an actuator deployed on an edge network.</p>
+
+      <p>Here are the steps in this exercise:</p>
+
+      <ol>
+        <li><p>List the actions that the actuator can performs and create a Restful API that calls each action.</p></li>
+        <li><p>Import the Express Node module, and setup the server to respond to the Restful API.</p></li>
+        <li><p>Create API Endpoints for server that correspond to the API you defined for the actuator.</p></li>
+        <li><p>Implement each API endpoint.</p></li>
+      </ol>
+
+
+      <h2>References</h2>
+
+      <ul>
+        <li><p><a href="https://www.npmjs.com/package/express">https://www.npmjs.com/package/express</a></p></li>
+        <li><p><a href="https://en.wikipedia.org/wiki/Representational_state_transfer">https://en.wikipedia.org/wiki/Representational_state_transfer</a></p></li>
+      </ul>
+
+      <div class="callout done has-goto-button">
+        <p>Ready for the next module?</p>
+        <p><a href="../index.html#done-module-edge" class="link-button centered">Go to next module »</a></p>
+      </div>
+
+    </div>
+    <script src="/js/codemirror.js"></script>
+    <script src="/js/mode/javascript/javascript.js"></script>
+    <script>
+      var editors = ["code1", "code2"]
+
+      for (i in editors) {
+          console.log(editors[i]);
+          CodeMirror.fromTextArea(document.getElementById(editors[i]), {
+              lineNumbers: true,
+              matchBrackets: true,
+              continueComments: "Enter",
+              extraKeys: {"Ctrl-Q": "toggleComment"}
+          });
+      };
+    </script>
+  </body>
+</html>

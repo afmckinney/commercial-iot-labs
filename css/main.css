@@ -720,10 +720,10 @@ pre {
   padding-left: 20px; }
 
 ol li {
-  margin-bottom: 1.5em; }
+  margin-bottom: 0.1em; }
 
 ul li {
-  margin-bottom: 0.5em; }
+  margin-bottom: 0.1em; }
 
 ol li ul,
 ul li ul {
@@ -1177,7 +1177,7 @@ li .callout::before {
 /*  OVERRIDES FOR COMMERCIAL */
 html {
     color: #4d4d4d;
-    background-color: #f6f7f7;
+    background-color: #fcfcfc;
     font-family: "OpenSansRegular","Helvetica Neue",Arial,sans-serif;
 }
 .subtitle {
@@ -1233,4 +1233,12 @@ th {
   border: 1px solid #ccc;
   font-weight: bold;
   padding: 4px;
+}
+
+p.label {
+    margin: 0px 0 2px 30px;
+    font-weight: bold;
+    font-size: 0.75em;
+    color: #666;
+    text-decoration: underline;
 }
