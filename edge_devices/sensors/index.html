@@ -6,6 +6,9 @@
     <title>Intel® Commercial IoT Workshop</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/css/main.css">
+
+    <!-- Include CodeMirror CSS-->
+    <link rel="stylesheet" href="/css/codemirror.css">
   </head>
   <body>
     <header>
@@ -29,13 +32,36 @@
           <p>Add the MQTT NPM package to the dependencies section of the <strong>package.json</strong> file.</p>
           <p><code>$ npm install mqtt --save</code></p>
         </li>
-        <li><p>Import the MQTT and the <strong>jsupm_grove</strong> packages with the <strong>require</strong> statement.</p></li>
-        <li><p>Initialize the temperature sensor. See the <a href="https://software.intel.com/en-us/iot/hardware/sensors/grove-temperature-sensor">temperature sensor documentation</a> on the <a href="http://software.intel.com/iot/">Intel Developer Zone</a>.</p></li>
+        <li><p>Import the MQTT and the <strong>jsupm_grove</strong> packages with the <strong>require</strong> statement.</p>
+
+        <div>
+          <textarea id="code1" name="code">
+// Load Grove module
+var groveSensor = require('jsupm_grove');
+          </textarea>
+        </div></li>
+        <li><p>Initialize the temperature sensor. See the <a href="https://software.intel.com/en-us/iot/hardware/sensors/grove-temperature-sensor">temperature sensor documentation</a> on the <a href="http://software.intel.com/iot/">Intel Developer Zone</a>.
+
+        <div>
+          <textarea id="code2" name="code">
+// Create the temperature sensor object using AIO pin 0
+var temp = new groveSensor.GroveTemp(0);
+          </textarea>
+        </div></p></li>
         <li><p>Connect to the Mosquitto database. See the <a href="https://www.npmjs.com/package/mqtt">MQTT module documentation.</a></p>
+        <div>
+          <textarea id="code3" name="code">
+// Require the MQTT connections
+var mqtt = require('mqtt');
+var client  = mqtt.connect("mqtt://192.168.1.1");
+     </textarea>
+        </div>
 
 </li>
-        <li><p>Publish a sensor announcement. The sensor announcement should be a JSON string. Be sure that you remember the JSON strings format because you will need to receive the announcement and save it to the database in the next lab.</p></li>
-        <li><p>Write an event handler that responds to the MQTT connect event.</p></li>
+        <li><p>Write an event handler that responds to the MQTT connect event.</p>
+</li>
+        <li><p>Publish a sensor announcement from within the MQTT connect event callback. The sensor announcement should be a JSON string. Be surethat you remember the JSON strings format because you will need to receive the announcement and save it to the database in the next lab.</p></li>
+
         <li><p>Inside the event, write a <strong>setInterval</strong> function that publishes the sensor data.  The setInterval function is NodeJS function that lets you call a function on a timed interval. See <a href="https://nodejs.org/api/timers.html">Timers Node.js v4.1.1 Manual & Documentation</a> for more information on setInterval</p></li>
       </ol>
 
@@ -53,5 +79,20 @@
       </ul>
 
     </div>
+    <script src="/js/codemirror.js"></script>
+    <script src="/js/mode/javascript/javascript.js"></script>
+    <script>
+      var editors = ["code1", "code2", "code3", "code4"]
+
+      for (i in editors) {
+          console.log(editors[i]);
+          CodeMirror.fromTextArea(document.getElementById(editors[i]), {
+              lineNumbers: true,
+              matchBrackets: true,
+              continueComments: "Enter",
+              extraKeys: {"Ctrl-Q": "toggleComment"}
+          });
+      };
+    </script>
   </body>
 </html>

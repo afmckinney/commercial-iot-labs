@@ -1242,3 +1242,7 @@ p.label {
     color: #666;
     text-decoration: underline;
 }
+
+.CodeMirror {
+    height: 100%;
+}

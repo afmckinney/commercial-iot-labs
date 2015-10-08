@@ -6,6 +6,9 @@
     <title>Intel® Commercial IoT Workshop</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/css/main.css">
+
+    <!-- Include CodeMirror CSS-->
+    <link rel="stylesheet" href="/css/codemirror.css">
   </head>
   <body>
     <header>
@@ -19,16 +22,56 @@
 
       <h2><a name="actuators">Controlling Edge Network Devices Actuators with Restful HTTP</a></h2>
 
-      <p>In this exercise, you will create a restful HTTP API to control an actuator deployed on an edge network.</p>
+      <p>In this exercise, you will create a restful HTTP API to control an actuator deployed on an edge network. Use the <a href="http://expressjs.com/">Express</a> NPM module to implement a Restful HTTP server control the LCD display.</p>
 
-      <p>Here are the steps in this exercise:</p>
+      <h3>Familiarize Yourself with this Restful API for controlling the LCD Screen</h3>
+      <p>These are the actions that the actuator can perform.</p>
 
-      <ol>
-        <li><p>List the actions that the actuator can performs and create a Restful API that calls each action.</p></li>
-        <li><p>Import the Express Node module, and setup the server to respond to the Restful API.</p></li>
-        <li><p>Create API Endpoints for server that correspond to the API you defined for the actuator.</p></li>
-        <li><p>Implement each API endpoint.</p></li>
-      </ol>
+      <ul>
+        <li><b>GET /lcd/backlight</b> - Retrieves the current status of the LCD backlight</li>
+        <li><b>PUT /lcd/backlight</b> - Sends a JSON string that sets the state of the LCD backlight</li>
+        <li><b>DELETE /lcd/backlight</b> - Turns the LCD backlight off</li>
+      </ul>
+      <ul>
+        <li><b>GET /lcd/text</b> - Retrieves the current status of the LCD text</li>
+        <li><b>PUT /lcd/text</b> - Sends a JSON string that sets the state of the LCD text</li>
+        <li><b>DELETE /lcd/text</b> - Turns the LCD text off</li>
+      </ul>
+
+      <h3>Create the Project Directory and Install NPM Modules</h3>
+      <p>Create a <code>lcd-server</code> directory and change into that directory. <code>cd lcd-server</code></p>
+
+      <p>Install the NPM Express module.</p>
+      <pre><code>$ npm install express --save</code></pre>
+
+      <h3>Initialize the Express Application</h3>
+      <div>
+        <textarea id="code1" name="code">
+var express = require('express');
+var app = express();
+
+// Declare a backlight object
+var backlight = { r:0, g:0, b:0 };
+
+// Declare a variable for the LCD text
+var lcdtext = "";
+        </textarea>
+      </div>
+
+      <p>Implement the rest of the API endpoints.</p>
+
+      <div>
+        <textarea id="code2" name="code">
+// Respond with a JSON string containing the LCD backlight status
+app.get('/lcd/backlight/', function (request, response) {
+  response.status(200).json(backlight);
+});
+        </textarea>
+      </div>
+
+    <h2>Solution</h2>
+    <p>During the lab, the instructor will make the solutions public at this URL.</p>
+    <p><a href="https://github.com/intel-iot-roadshow/commercial-edge-network-database">https://github.com/intel-iot-roadshow/commercial-edge-network-database</a></p>
 
 
       <h2>References</h2>
@@ -44,5 +87,20 @@
       </div>
 
     </div>
+    <script src="/js/codemirror.js"></script>
+    <script src="/js/mode/javascript/javascript.js"></script>
+    <script>
+      var editors = ["code1", "code2"]
+
+      for (i in editors) {
+          console.log(editors[i]);
+          CodeMirror.fromTextArea(document.getElementById(editors[i]), {
+              lineNumbers: true,
+              matchBrackets: true,
+              continueComments: "Enter",
+              extraKeys: {"Ctrl-Q": "toggleComment"}
+          });
+      };
+    </script>
   </body>
 </html>
