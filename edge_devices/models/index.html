@@ -18,9 +18,13 @@
 
       <h1>Edge Device Management</h1>
 
-      <p class="subtitle">Part 2: Creating JavaScript Models to represent the Edge Network
+      <p class="subtitle">Part 2: Create JavaScript Models to represent the Edge Network</p>
 
-      <h2><a name="models">Defining Types for the Edge Network</a></h2>
+      <div class="tldr">
+        Write a NodeJS server than monitors the temperature and publishes it over MQTT.
+      </div>
+
+      <h2>Defining Types for the Edge Network</h2>
 
       <p>As we build our IoT Gateway system, we will need to define the objects and events that we want to track on our edge network.</p>
       <p>For this edge network, we will define five types that we will track in the database.</p>
@@ -33,7 +37,7 @@
         <li><b>System errors</b> - a text string and a timestamp describing the errors on the edge network.</li>
       </ul>
 
-      <h2><a name="models">Create a Project Directory and Install MongooseJS</a></h2>
+      <h2>Create a Project Directory and Install MongooseJS</h2>
 
       <p>MongooseJS is an Object Data Manager that let’s you build JavaScript objects that can create, read, validate, update and remove documents from a MongoDB.</p>
 
@@ -56,14 +60,16 @@
       <pre><code>$ mkdir schema</code></pre>
 
 
-      <h2><a name="models">Write Mongoose JS Models to Access MongoDB</a></h2>
+      <h2>Write Mongoose JS Models to Access MongoDB</h2>
+
       <p>MongooseJS is an schema-based solution to model MongoDB database objects.  It allows you to easily create, validate, save, update and remove items from your MongoDB.  Everything in MongooseJS starts with a schema.  After a schema is defined it can be used to create a Model, which is the object you will use in your program to access the database.</p>
 
       <h3>Build the Sensor Model</h3>
+
       <p>If you have any questions be sure you consult the <a href="http://mongoosejs.com/docs/guide.html">The MongooseJS User Guide</a>.</p>
 
-
       <p>Let's build a schema for a sensor with the following data types:</p>
+
       <ul>
         <li>id : String</li>
         <li>name : String</li>
@@ -188,15 +194,18 @@ module.exports = {
     <p>During the lab, the instructor will make the solutions public at this URL.</p>
     <p><a href="https://github.com/intel-iot-roadshow/commercial-edge-network-database">https://github.com/intel-iot-roadshow/commercial-edge-network-database</a></p>
 
+      <div class="callout done has-goto-button">
+        <p><!-- describe what they should have at this point --></p>
+        <p><a href="../index.html#done-part-2" class="link-button centered">Continue to the next step »</a></p>
+      </div>
+
+
       <h2>Additional resources</h2>
 
       <ul>
         <li><a href="http://mongoosejs.com/docs/guide.html">http://mongoosejs.com/docs/guide.html</a></li>
       </ul>
-      <div class="callout done has-goto-button">
-        <p>Ready for the next module?</p>
-        <p><a href="../index.html#done-module-edge" class="link-button centered">Go to next module »</a></p>
-      </div>
+      
 
     </div>
     <script src="/js/codemirror.js"></script>
