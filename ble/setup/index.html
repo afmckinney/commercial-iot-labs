@@ -16,17 +16,17 @@
       <h1>Set up Bluetooth</h1>
 
       <div class="tldr">
-        Run these commands to enable BLE on your devices.
-        1. rfkill unblock bluetooth
-        2. systemctl disable bluetooth
-        3. hciconfig hci0 up
+        Run these commands to configure BLE on your devices.
       </div>
 
       <ol>
 
         <li>
-          <p>Log into your Intel Edison</p>
-          <p><code>commands go here</code></p>
+          <p>Initialize BLE for development</p>
+          <pre><code>$ rfkill unblock bluetooth
+$ systemctl disable bluetooth
+$ hciconfig hci0 up
+</code></pre>
         </li>
 
         <li>
