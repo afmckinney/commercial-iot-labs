@@ -17,6 +17,9 @@
 
       <div class="tldr">
         Run these commands to enable BLE on your devices.
+        1. rfkill unblock bluetooth
+        2. systemctl disable bluetooth
+        3. hciconfig hci0 up
       </div>
 
       <ol>
