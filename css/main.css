@@ -1243,6 +1243,26 @@ p.label {
     text-decoration: underline;
 }
 
+<<<<<<< HEAD
 .CodeMirror {
     height: 100%;
+=======
+.dont-peek {
+  font-family: "Courier";
+  font-size: 14px;
+  margin: 10px 0 500px 10px;
+}
+
+.dont-peek .cursor {
+  animation: blink 1s infinite;
+}
+
+@keyframes blink{
+  to{opacity: .0;}
+}
+
+.ready-to-peek {
+  font-weight: bold;
+  margin-bottom: 50px;
+>>>>>>> origin/master
 }

@@ -9,31 +9,39 @@
   </head>
   <body>
     <header>
-      <a href="/index.html"><img src="/img/intel_logo.png" alt="Intel logo" width="52" height="35"></a>
+      <a href="/index.html"><img src="/img/intel_logo.png" alt="Intel® logo" width="52" height="35"></a>
     </header>
     <div class="content">
 
       <h1>Edge Device Management</h1>
 
-      <p class="subtitle">Part 1: Setup a MQTT and MongoDB Server</p>
+      <p class="subtitle">Part 1: Set up a MQTT and MongoDB Server</p>
 
-      <h2><a name="servers">Setup the Mosquitto MQTT Broker</a></h2>
+      <h2>Login to your Intel® Iot Gateway</h2>
 
-      <p>On the gateway type the following:</p>
+      <p>The commands in this section will be run on the Intel® Iot Gateway so SSH into your Intel® Iot Gateway.</p>
 
-<pre><code>$ adduser mosquitto
-$ mosquitto
-</code></pre>
+      <p>If you need a reminder, look at <span class="icon bookmark"><a href="/intro/step1/index.html">Step 1: Login to your Intel® Iot Gateway</a></span> from the <em>Intel® Commercial IoT Workshop Intro Module</em>.</p>
 
-      <p>This will create a user for your Mosquitto and launch the MQTT Broker named mosquitto.</p>
-
-      <h2>Set up MongoDB on the Intel Iot Gateway</h2>
+      <h2>Set up the Mosquitto MQTT Broker</h2>
 
       <ol>
+
         <li>
-          <p>SSH into your Intel Iot Gateway and login.</p>
-          <p>If you need a reminder, look at <span class="icon bookmark"><a href="/intro/step1/index.html">Step 1: Login to your Intel Iot Gateway</a> from the Intro Module.</p>
+          <p>Create a user for your Mosquitto.</p>
+          <p><code>$ adduser mosquitto</code></p>
         </li>
+
+        <li>
+          <p>Launch the MQTT Broker named mosquitto</p>
+          <p><code>$ mosquitto</code></p>
+        </li>
+
+      </ol>
+
+      <h2>Set up MongoDB on the Intel® Iot Gateway</h2>
+
+      <ol>
 
         <li>
           <p>Download the MongoDB software.</p>
@@ -48,29 +56,34 @@ $ mosquitto
         </li>
 
         <li>
-          <p>Add the mongodb binaries to the /usr/bin directory</p>
+          <p>Add the mongodb binaries to the <span class="icon folder">/usr/bin</span> directory</p>
           <pre><code>$ cp ./mongodb-linux-x86_64-3.0.6/bin/* /usr/bin/</code></pre>
         </li>
 
         <li>
           <p>The Intel Iot Gateway is enabled with <strong>grsecurity</strong> which by default prevents the execution of processes that are not added to a white list.</p>
-          <p>Add the MongoDM daemon (<strong>mongod)</strong> to the whitelist type:</p>
+          <p>Add the MongoDM daemon (<code>mongod</code>) to the whitelist type:</p>
           <pre><code>$ paxctl -Cm /usr/bin/mongod</code></pre>
         </li>
 
         <li>
-          <p>The directory /data/db is the default directory that MongoDB stores its data.  Let's make sure that it has plenty of space.  Be sure that the /dev/sda3 partition is mounted to /data/db</p>
+          <p>The directory <span class="icon folder">/data/db</span> is the default directory that MongoDB stores its data.  Let's make sure that it has plenty of space.  Be sure that the <span class="icon folder">/dev/sda3</span> partition is mounted to <span class="icon folder">/data/db</span>.</p>
           <pre><code>$ umount /dev/sda3</code></pre>
           <pre><code>$ mkdir -p /data/db</code></pre>
           <pre><code>$ mount /dev/sda3 /data/db</code></pre>
         </li>
 
         <li>
-          <p>Start the MongoDM daemon using the "mongod" command:</p>
+          <p>Start the MongoDM daemon using the <code>mongod</code> command:</p>
           <pre><code>$ mongod</code></pre>
         </li>
 
       </ol>
+
+      <div class="callout done has-goto-button">
+        <p>You should now have a Mosquitto MQTT Broker and MongoDB running on the Intel® IoT Gateway.</p>
+        <p><a href="../index.html#done-part-1" class="link-button centered">Continue to the next step »</a></p>
+      </div>
 
       <h3>References</h3>
 
@@ -79,11 +92,6 @@ $ mosquitto
         <li><p><a href="http://docs.mongodb.org/manual/">http://docs.mongodb.org/manual/</a></p></li>
         <li><p><a href="https://wiki.gentoo.org/wiki/Hardened/PaX_Quickstart">https://wiki.gentoo.org/wiki/Hardened/PaX_Quickstart</a></p></li>
       </ul>
-
-      <div class="callout done has-goto-button">
-        <p>Ready for the next module?</p>
-        <p><a href="/edge_devices/models/index.html" class="link-button centered">Go to next module »</a></p>
-      </div>
 
     </div>
   </body>
