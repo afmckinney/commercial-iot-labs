@@ -1256,10 +1256,6 @@ p.label {
     text-decoration: underline;
 }
 
-<<<<<<< HEAD
-.CodeMirror {
-    height: 100%;
-=======
 .dont-peek {
   font-family: "Courier";
   font-size: 14px;
@@ -1277,5 +1273,4 @@ p.label {
 .ready-to-peek {
   font-weight: bold;
   margin-bottom: 50px;
->>>>>>> origin/master
 }
