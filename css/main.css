@@ -1218,6 +1218,19 @@ code {
   padding: 0.15em 0.35em;
 }
 
+code.highlight-diff {
+  color: #989898
+}
+
+code.highlight-diff strong {
+  color: #4d4d4d;
+}
+
+code strike {
+    text-decoration: none;
+    background-image: linear-gradient(rgba(0,0,0,0) 7px,#cc1f1f 7px,#cc1f1f 9px,rgba(0,0,0,0) 9px)
+}
+
 pre > code {
   padding: 0;
   border-radius: 0;
