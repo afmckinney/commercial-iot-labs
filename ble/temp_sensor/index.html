@@ -44,7 +44,7 @@ var screen = new LCD.Jhd1313m1(6, 0x3E, 0x62);
 function monitor() {
     setInterval(function() {
       
-      // Read the temperature sensor
+        // Read the temperature sensor
         var celsius = temp.value();
         var fahrenheit = Math.round(celsius * 9.0/5.0 + 32.0);
         console.log(celsius + "° Celsius, or " + fahrenheit + "° Fahrenheit");
@@ -90,6 +90,13 @@ var LCD = require("jsupm_i2clcd");
 
 <strong>// Include the libraries for BLE
 var bleno = require('bleno');</strong>
+
+// Create a new instance of a Grove Temperature Sensor
+var temp = new groveSensor.GroveTemp(0);
+var celsius = null;
+
+// Create a new instance of a Grove RGB LCD screen
+var screen = new LCD.Jhd1313m1(6, 0x3E, 0x62);
 </code></pre>
         </li>
 
@@ -98,7 +105,15 @@ var bleno = require('bleno');</strong>
 <pre><code class="highlight-diff">// Include the libraries for BLE
 var bleno = require('bleno');
 
-<strong>var BlenoPrimaryService = bleno.PrimaryService;
+// Create a new instance of a Grove Temperature Sensor
+var temp = new groveSensor.GroveTemp(0);
+var celsius = null;
+
+// Create a new instance of a Grove RGB LCD screen
+var screen = new LCD.Jhd1313m1(6, 0x3E, 0x62);
+
+<strong>// Extend the bleno BLE classes
+var BlenoPrimaryService = bleno.PrimaryService;
 var BlenoCharacteristic = bleno.Characteristic;
 var BlenoDescriptor = bleno.Descriptor;</strong>
 </code></pre>
@@ -109,35 +124,23 @@ var BlenoDescriptor = bleno.Descriptor;</strong>
 <pre><code class="highlight-diff">// Include the libraries for BLE
 var bleno = require('bleno');
 <strong>var util = require('util');</strong>
-
-var BlenoPrimaryService = bleno.PrimaryService;
-var BlenoCharacteristic = bleno.Characteristic;
-var BlenoDescriptor = bleno.Descriptor;
 </code></pre>
         </li>
 
         <li>
-          <p><code>TemperatureService()</code> and <code>TemperatureReadCharacteristic()</code> have been defined for you below. Use <code>util</code> to extend <code>PrimaryService</code> and <code>Characteristic</code>.</p>
-<pre><code class="highlight-diff">// Include the libraries for BLE
-var bleno = require('bleno');
-var util = require('util');
-
+          <p>Use <code>util</code> to extend bleno's <code>PrimaryService</code> and <code>Characteristic</code>.</p>
+          <p><code>TemperatureService()</code> and <code>TemperatureReadCharacteristic()</code> have been defined for you below.</p>
+<pre><code class="highlight-diff">// Extend the bleno BLE classes
 var BlenoPrimaryService = bleno.PrimaryService;
 var BlenoCharacteristic = bleno.Characteristic;
 var BlenoDescriptor = bleno.Descriptor;
 
 <strong>util.inherits(TemperatureReadCharacteristic, BlenoCharacteristic);
-util.inherits(TemperatureService,BlenoPrimaryService);</strong>
+util.inherits(TemperatureService, BlenoPrimaryService);
 
-// Create a new instance of a Grove Temperature Sensor
-var temp = new groveSensor.GroveTemp(0);
-
-// Create a new instance of a Grove RGB LCD screen
-var screen = new LCD.Jhd1313m1(6, 0x3E, 0x62);
-
-<strong>function TemperatureService(){
+function TemperatureService(){
     TemperatureService.super_.call(this, {
-         uuid: 'ec00',
+        uuid: 'ec00',
         characteristics: [
           new TemperatureReadCharacteristic()
         ]
@@ -167,17 +170,9 @@ monitor();
 
 
         <li>
-          <p>Instead of reading the value directly, bleno will need to read and write the sensor value from a buffer so declare a global variable <code>celsius</code> to use in <code>TemperatureReadCharacteristic.prototype.onReadRequest</code> defined below.</p>
+          <p>bleno will need to write the sensor value to a buffer so declare a global variable <code>celsius</code> to use in <code>TemperatureReadCharacteristic.prototype.onReadRequest</code> defined below.</p>
           <p>Update <code>monitor()</code> to use the global variable instead of a local variable.</p>
-<pre><code class="highlight-diff">// Include the libraries for BLE
-var bleno = require('bleno');
-var util = require('util');
-
-var BlenoPrimaryService = bleno.PrimaryService;
-var BlenoCharacteristic = bleno.Characteristic;
-var BlenoDescriptor = bleno.Descriptor;
-
-// Create a new instance of a Grove Temperature Sensor
+<pre><code class="highlight-diff">// Create a new instance of a Grove Temperature Sensor
 var temp = new groveSensor.GroveTemp(0);
 <strong>var celsius = null;</strong>
 
@@ -185,7 +180,12 @@ var temp = new groveSensor.GroveTemp(0);
 var screen = new LCD.Jhd1313m1(6, 0x3E, 0x62);
 
 util.inherits(TemperatureReadCharacteristic, BlenoCharacteristic);
-util.inherits(TemperatureService,BlenoPrimaryService);
+util.inherits(TemperatureService, BlenoPrimaryService);
+
+// Extend the bleno BLE classes
+var BlenoPrimaryService = bleno.PrimaryService;
+var BlenoCharacteristic = bleno.Characteristic;
+var BlenoDescriptor = bleno.Descriptor;
 
 function TemperatureService(){
     //...
@@ -200,7 +200,7 @@ function TemperatureReadCharacteristic(){
         callback(BlenoCharacteristic.RESULT_ATTR_NOT_LONG, null);
     }
     else{
-        if (null != celsius){
+        if (null !== celsius){
             var buffer = new Buffer(1);
             buffer.writeUInt8(celsius,0);
             callback(BlenoCharacteristic.RESULT_SUCCESS, buffer);
@@ -256,7 +256,7 @@ monitor();
             if (err) {
                 console.log(err);
             }
-            setInterval(monitor, 100);
+            setInterval(monitor, 1000);
         });
     }
     else {
