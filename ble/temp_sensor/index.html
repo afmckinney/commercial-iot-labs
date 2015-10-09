@@ -277,16 +277,163 @@ bleno.on('advertisingStart', function(err) {
 
         <li>
           <p>Your final <span class="icon file">main.js</span> should look like the <a href="https://github.com/Vaghesh/Bluetooth-Commercial-IoT-Workshop/blob/master/Temperature-Sensor/EdgeDevices-Peripheral/" target="_blank">final solution on Github</a>.</p>
-          <p>Make sure your changes have been saved and use the buttons at the bottom of the Intel® XDK to:<br>
-            (1) Build your application, <br>
-             <span class="footnote">(It is important to run Build at least once since you add new dependencies to <span class="icon file">package.json</span>.)</span> <br> 
-            (2) Upload it to Intel® Edison, and <br>
-            (3) Run the application.</p>
-          <p><img src="/sensors/temp_sensor/xdk_deploy_steps.png" alt="" ></p>
+          <p>Make sure your changes have been saved and use the buttons at the bottom of the Intel® XDK to: (1) Build, (2) Upload, and (3) Run the application.</p>
+          <p>If successful, you should see the console log output the temperature every 1 second.</p>
+          <p><img src="peripheral-result.png" alt="" ></p>
         </li>
 
       </ol>
 
+      <h2>Turn the Intel® IoT Gateway into a BLE central module</h2>
+
+      <p>Use <a href="https://github.com/sandeepmistry/noble">noble</a>, a NodeJS module, to turn the Intel® IoT Gateway into a BLE central module that will read the temperature data broadcasted from a BLE peripheral (i.e. your Intel® Edison).</p>
+
+      <ol>
+
+        <li>
+          <p>Log into your Intel® IoT Gateway.</p>
+        </li>
+
+        <li>
+          <p>Create a new project directory.</p>
+          <p><code>mkdir ble-central</code></p>
+          <p>And change into it.</p>
+          <p><code>cd ble-central</code></p>
+        </li>
+
+        <li>
+          <p>Install <code>noble</code> using NPM.</p>
+          <p><code>npm install noble</code></p>
+        </li>
+
+        <li>
+          <p>Create a Node application and name the file <span class="icon file">main.js</span>.</p>
+          <p><code>touch main.js</code></p>
+        </li>
+
+        <li>
+          <p>Use vi to edit <span class="icon file">main.js</span>.</p>
+          <p><code>vi main.js</code></p>
+        </li>
+
+        <li>
+          <p>Press <code>i</code> to insert code using vi.</p>
+          <p>Include the <code>noble</code> NodeJS module at the top of the file.</p>
+          <p><code>var noble = require('noble');</code></p>
+        </li>
+
+        <li>
+          <p>Declare constants for the BLE service.</p>
+          <p>These are the <strong>same</strong> UUID's used in the peripheral code that's running on the Intel® Edison.</p>
+<pre><code>var ServiceName = 'temperature';
+var Service_UUID = 'ec00';
+var Characteristic_UUID = 'ec01';
+var TemperatureCharacteristic = null;
+</code></pre>
+        </li>
+
+        <li>
+          <p>Add the supplied <code>readTemperature()</code> function to read the temperature value from the buffer.</p>
+<pre><code>function readTemperature() {
+    TemperatureCharacteristic.read(function(error) {
+        if(error){
+            clearInterval(readTemperature);
+            console.log(error);
+        }
+    });    
+    TemperatureCharacteristic.once('read', function(value) {
+        var celsius = value.readUInt8(0);
+        console.log ('Temperature is '  + celsius + '°C');
+  }); 
+}
+</code></pre>
+          <p>Note that the buffer offset position is the <strong>same</strong> as the buffer position used in the peripheral code. If you recall, you used <code>buffer.writeUInt8(celsius,0);</code> on the Intel® Edison.</p>
+        </li>
+
+        <li>
+          <p><code>handleService()</code> will loop through the Bluetooth characteristics sent and look for the one that matches <code>Characteristic_UUID</code> or <strong>'ec01'</strong>.</p>
+<pre><code>function handleService(service){
+    service.discoverCharacteristics([], function(error, characteristics) {
+        characteristics.forEach(function(characteristic){
+            console.log('Found Characteristic:', characteristic.uuid);
+            for(var i = 0, l = characteristics.length; i < l; i++) {
+                if (characteristics[i].uuid === Characteristic_UUID){
+                    TemperatureCharacteristic = characteristics[i];
+                    setInterval(readTemperature,1000);
+                    break;  
+                }
+            }     
+        });
+    });
+}
+</code></pre>
+        </li>
+
+        <li>
+          <p>Finally, add event listeners for the <code>stateChange</code>, <code>discover</code>, and <code>disconnect</code> noble BLE events.</p>
+<pre><code>noble.on('stateChange', function(state) {
+  if (state === 'poweredOn') {
+    noble.startScanning();
+  } else {
+    noble.stopScanning();
+  }
+});
+
+noble.on('discover', function(peripheral) {
+    console.log('Peripheral Name is: ', peripheral.advertisement.localName);
+    if(peripheral.advertisement.localName == ServiceName){
+    noble.stopScanning();
+        peripheral.connect(function(error) {
+            if(error){
+                console.log(error);
+                return;
+            } 
+            peripheral.discoverServices([], function(error, services){
+                console.log(services.length, ' services discovered');
+                    for (var i = 0, l = services.length; i &lt; l; i++ ){
+                        var service = services[i];
+                        if (Service_UUID == service.uuid) {
+                            noble.stopScanning();
+                            console.log('Specific service found: ', service.uuid);
+                            handleService(service);
+                        }
+                    } 
+                });
+         });
+    }    
+});
+
+noble.on('disconnect', function() {
+    console.log('Trying to reconnect');
+    noble.startScanning();
+});
+</code></pre>
+          <p>The <code>discover</code> event handler is what looks for the <code>'temperature'</code> service in order to call <code>handleService()</code> when there's a matching service found.</p> 
+        </li>
+
+        <li>
+          <p>Press <code>ESC</code> to exit out of vi insert mode.</p>
+        </li>
+
+        <li>
+          <p>Type <code>:wq</code> to write your changes to the file and quit out vi.</p>
+        </li>
+
+        <li>
+          <p>Check that your peripheral app is still running on your Intel® Edison. (e.g. It should still be logging temperature values to the Intel®  XDK console.) Restart if needed.</p>
+        </li>
+
+        <li>
+          <p>Run the BLE central module on the Intel® IoT Gateway as a Node application.</p>
+          <p><code>$ node main.js</code></p>
+        </li>
+
+        <li>
+          <p>If successful, you should see the Intel® IoT Gateway scan for matching Bluetooth services. When the Intel® Edison is found, it will read the temperature value and output it to the terminal window.</p>
+          <p><img src="central-result.png" alt=""></p>
+        </li>
+
+      </ol>
 
       <div id="next-steps" class="callout done">
         <p><!-- You should now be seeing the temperature displayed on the LCD. --></p>
