@@ -9,31 +9,30 @@
   </head>
   <body>
     <header>
-      <a href="/index.html"><img src="/img/intel_logo.png" alt="Intel logo" width="52" height="35"></a>
+      <a href="/index.html"><img src="/img/intel_logo.png" alt="Intel® logo" width="52" height="35"></a>
     </header>
     <div class="content">
 
       <h1>Set up Bluetooth</h1>
 
       <div class="tldr">
-        Run these commands to configure BLE on your devices.
+        Run these commands to enable Bluetooth Low Energy (BLE) on <strong>both</strong> your Intel® Edison and Intel® IoT Gateway devices.
       </div>
 
       <ol>
 
         <li>
-          <p>Initialize BLE for development</p>
-          <pre><code>$ rfkill unblock bluetooth
+          <p>Shell into your Intel® Edison and run the following commands:</p>
+<pre><code>$ rfkill unblock bluetooth
+$ killall bluetoothd
 $ systemctl disable bluetooth
 $ hciconfig hci0 up
 </code></pre>
+          <!-- <p><img src="commands.png" alt=""></p> -->
         </li>
 
         <li>
-          <p>Here's how to format multi-line code</p>
-<pre><code>First line
-2nd line
-</code></pre>
+          <p>Shell into your Intel® IoT Gateway and run the same commands as above on your Gateway.</p>
         </li>
 
       </ol>
