@@ -35,8 +35,15 @@
 
       <ol>
         <li>
-          <p>Add the MQTT NPM package to the dependencies section of the <strong>package.json</strong> file.</p>
+          <p>Create a project named <code>temperaturePublisher</code></p>
+        </li>
+
+        <li>
+          <p>We need an NPM modules for this labs. Add the MQTT NPM package to the dependencies section of the <strong>package.json</strong> file.  The temperature sensor module is already installed on your Intel Edison.</p>
           <p><code>$ npm install mqtt --save</code></p>
+<p><code>$ npm install intel-commerical-edge-network-database-models --save</code></p>
+
+
         </li>
         <li><p>Import the MQTT and the <strong>jsupm_grove</strong> packages with the <strong>require</strong> statement.</p>
 
@@ -44,6 +51,8 @@
           <textarea id="code1" name="code">
 // Load Grove module
 var groveSensor = require('jsupm_grove');
+var mqtt = require('mqtt');
+var Data = require('intel-commerical-edge-network-database-models').DataModel;
           </textarea>
         </div></li>
         <li><p>Initialize the temperature sensor. See the <a href="https://software.intel.com/en-us/iot/hardware/sensors/grove-temperature-sensor">temperature sensor documentation</a> on the <a href="http://software.intel.com/iot/">Intel Developer Zone</a>.
@@ -64,11 +73,36 @@ var client  = mqtt.connect("mqtt://192.168.1.1");
         </div>
 
 </li>
-        <li><p>Write an event handler that responds to the MQTT connect event.</p>
-</li>
-        <li><p>Publish a sensor announcement from within the MQTT connect event callback. The sensor announcement should be a JSON string. Be surethat you remember the JSON strings format because you will need to receive the announcement and save it to the database in the next lab.</p></li>
+        <li>
+          <p>Write an event handler that responds to the MQTT connect event.  In this event handler, publish an announcement that a new sensor is available on the edge network.</p>
 
-        <li><p>Inside the event, write a <strong>setInterval</strong> function that publishes the sensor data.  The setInterval function is NodeJS function that lets you call a function on a timed interval. See <a href="https://nodejs.org/api/timers.html">Timers Node.js v4.1.1 Manual & Documentation</a> for more information on setInterval</p></li>
+</li>
+        <li><p>Publish a sensor announcement from within the MQTT connect event callback. The sensor announcement should be a JSON string. Be sure that you remember the JSON strings format because you will need to receive the announcement and save it to the database in the next lab.</p>
+          <p>The announcement should follow the <b>sensor schema</b> format.</p>
+
+        <textarea id="code4" name="code">
+var announcement = {
+     "name" : "Temperature Sensor",
+     "description" : "A temperature sensor"
+     "frequency" : "1000",
+     "active" : true,
+     "ioType" : "analog"
+}
+        </textarea></li>
+
+        <li><p>Inside the event, write a <strong>setInterval</strong> function that publishes the sensor data.  The setInterval function is NodeJS function that lets you call a function on a timed interval. See <a href="https://nodejs.org/api/timers.html">Timers Node.js v4.1.1 Manual & Documentation</a> for more information on setInterval</p>
+
+          <p>The temperature data should follow the <b>data schema</b> format.</p>
+
+        <textarea id="code5" name="code">
+var sensorData = {
+    sensor_id: temp.name(),
+    value: temp.value()
+};
+ </textarea>
+<p>Publish the data to the <code>sensors/temperature/data</code> MQTT topic.</p>
+
+</li>
       </ol>
 
       <h2>Solution</h2>
@@ -92,7 +126,7 @@ var client  = mqtt.connect("mqtt://192.168.1.1");
     <script src="/js/codemirror.js"></script>
     <script src="/js/mode/javascript/javascript.js"></script>
     <script>
-      var editors = ["code1", "code2", "code3", "code4"]
+      var editors = ["code1", "code2", "code3", "code4", "code5"]
 
       for (i in editors) {
           console.log(editors[i]);

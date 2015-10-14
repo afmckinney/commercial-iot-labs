@@ -61,8 +61,8 @@ var backlight = { r:0, g:0, b:0 };
 var lcdtext = "";
         </textarea>
       </div>
-
-      <p>Implement the rest of the API endpoints.</p>
+      <h3>Implement the API endpoints</h3>
+      <p>This is the implementation of the <code>GET /lcd/backlight</code>.</p>
 
       <div>
         <textarea id="code2" name="code">
@@ -71,6 +71,8 @@ app.get('/lcd/backlight/', function (request, response) {
   response.status(200).json(backlight);
 });
         </textarea>
+
+        <p>Implement the <code>POST</code> and <code>DELETE</code> for <code>/lcd/backlight</code>, as well as the <code>GET</code>, <code>POST</code> and <code>DELETE</code> for <code>/lcd/text</code>.</p>
       </div>
 
     <h2>Solution</h2>

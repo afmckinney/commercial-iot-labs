@@ -13,58 +13,28 @@
     </header>
     <div class="content">
 
-      <h1>Edge Device Management</h1>
+      <h1>Network Integration of the Edge Device</h1>
 
       <!-- <p class="subtitle">Part 1: Provisioning Sensors and Actuators on a Managed Iot Network</p> -->
 
       <!-- <h2>Objective</h2> -->
 
-      <p>This lab is divided into four parts.</p>
-<<<<<<< HEAD
+      <p>Now that you've created a Intel Edison temperature monitor that prints to the LCD screen ( often called the edge device in these labs ), we will begin taking steps to integrate this edge device onto the Intel Iot Gateway's network.  The goal is to move the administration and configuration of the edge device to the gateway. This allows businesses to manage a large deployments of IoT devices in a scalable manner.</p>
+      <p>We will begin by creating a database that will track the status of the IoT edge network. Then we will demonstrate how to make a sensor publish data to the edge netowrk by writing a NodeJS server that publishes the temperature data to the Intel IoT Gateway.  Likewise, we will also write software to allow the LCD screen to be controlled on the edge network.</p>
+      <p>The techniques learned in this exercise can be applied to any network enabled sensor or actuator to integrate them into an IoT edge network.</p>
+
+      <p>Here are the steps in this lab</p>
       <ol>
         <li><a href="servers/index.html">Setup a MQTT Server and a Mongo database.</a></li>
-        <li><a href="models/index.html">Write MongooseJS schema and data models.</a></li>
-        <li><a href="sensors/index.html">Write a NodeJS server than monitors the temperature and publishes it over MQTT</a></li>
-        <li><a href="actuators/index.html">Write a NodeJS server than receives Restful HTTP requests to control an edge device</a></li>
+        <li><a href="models/index.html">Write JavaScript schema and data models.</a></li>
+        <li><a href="sensors/index.html">Write a NodeJS server that publishes the temperature over MQTT</a></li>
+        <li><a href="actuators/index.html">Write a NodeJS server than receives Restful HTTP requests to control an actuator</a></li>
       </ol>
 
       <div class="callout done has-goto-button">
         <p>Ready for the next module?</p>
-        <p><a href="servers/index.html" class="link-button centered">Go to next module »</a></p>
-=======
-
-      <div id="start">
-        <h2>Part 1</h2>
-        <p>Set up a MQTT Server and a Mongo database.</p>
-        <a href="servers/index.html" class="link-button centered">Go »</a>
+        <p><a href="/gateway/sensors/index.html" class="link-button centered">Go to next module »</a></p>
       </div>
-
-      <div id="done-part-1">
-        <h2>Part 2</h2>
-        <p>Create JavaScript Models to represent the Edge Network.</p>
-        <a href="models/index.html" class="link-button centered">Go »</a>
-      </div>
-
-      <div id="done-part-2">
-        <h2>Part 3</h2>
-        <p>Write a NodeJS server than monitors the temperature and publishes it over MQTT.</p>
-        <a href="sensors/index.html" class="link-button centered">Go »</a>
-      </div>
-
-      <div id="done-part-3">
-        <h2>Part 4</h2>
-        <p>Provision and Control Actuators on an Edge Network.</p>
-        <a href="actuators/index.html" class="link-button centered">Go »</a>
-      </div>
-
-      <div id="done-part-4">
-        <div class="callout done has-goto-button">
-          <p>Ready for the next module?</p>
-          <p><a href="../index.html#done-module-edge-devices" class="link-button centered">Go to next module »</a></p>
-        </div>
->>>>>>> origin/master
-      </div>
-
     </div>
   </body>
 </html>
