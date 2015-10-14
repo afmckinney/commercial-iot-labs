@@ -17,200 +17,106 @@
     <div class="content">
 
       <h1>Sensor Monitoring on the Gateway</h1>
+      <p class="subtitle">Recording MQTT Sensor Activity</p>
 
-      <h2><a name="models">Create a Project Directory and Install MongooseJS</a></h2>
+      <p>Once the sensors on the edge network are publishing data, we can listen to the data and begin to use it to trigger actions or perform edge analytics.</p>
+      <p>The purpose of this project is to track new sensors on the edge network and to record their data into the MongoDB database.</p>
 
-      <p>MongooseJS is an Object Data Manager that let’s you build JavaScript objects that can create, read, validate, update and remove documents from a MongoDB.</p>
+      <p class="callout info">The Intel XDK only deploys to an Intel Edison.  For this project, you will have to upload your project to the Intel IoT Gateway using WinSCP.</p>
 
-      <p>Read through the documentation on building Mongoose Schemas and Models at <a href="http://mongoosejs.com/docs/guide.html">http://mongoosejs.com/docs/guide.html</a> then start the exercise.</p>
+      <h2><a name="sensorMonitor">Create a New Project and Import NPM Modules</a></h2>
 
-      <p>Be sure that you whitelist the <code>/usr/bin/node</code> executable:</p>
+      <p>Create a new project named <b>edge-sensor-monitor</b></p>
 
-      <pre><code>$ paxctl -Cm /usr/bin/node</code></pre>
-
-      <p>Also create a project directory.</p>
-
-      <pre><code>$ mkdir project</code></pre>
-
-      <p>Create a README file and write into it that this project contains the models for the edge network.</p>
-
-      <p>Install MongooseJS</p>
-      <pre><code>$ npm install mongoose --save</code></pre>
-
-      <p>Create a <code>schema</code> directory and change to that directory, <code>cd schema</code>. We will store all of our schema files here. </p>
-      <pre><code>$ mkdir schema</code></pre>
+      <p>Import the MQTT and Mongoose NPM packages by adding them to the package.json file.</p>
 
 
-      <h2><a name="models">Write Mongoose JS Models to Access MongoDB</a></h2>
-      <p>MongooseJS is an schema-based solution to model MongoDB database objects.  It allows you to easily create, validate, save, update and remove items from your MongoDB.  Everything in MongooseJS starts with a schema.  After a schema is defined it can be used to create a Model, which is the object you will use in your program to access the database.</p>
-
-      <h3>Build the Sensor Model</h3>
-      <p>If you have any questions be sure you consult the <a href="http://mongoosejs.com/docs/guide.html">The MongooseJS User Guide</a>.</p>
-
-
-      <p>Let's build a schema for a sensor with the following data types:</p>
-      <ul>
-        <li>id : String</li>
-        <li>name : String</li>
-        <li>description : String</li>
-        <li>maxfrequency : Number</li>
-        <li>active : Boolean</li>
-        <li>ioType String.</li>
-      </ul>
-
-      <div>
-        <p class="label">schema/sensorSchema.js</p>
+        <p class="label">./package.json</p>
         <textarea id="code1" name="code">
-var mongoose = require('mongoose');
-var sensorSchema = new mongoose.Schema({
-    id : {
-        type: String,
-        required: true
-    },
-    name  : {
-        type: String,
-        required: true
-    },
-    description : {
-        type: String,
-        required: true
-    },
-    maxfrequency : {
-        type: Number,
-        required: true
-    },
-    frequency : {
-        type: Number,
-        required: true
-    },
-    active : {
-        type: Boolean,
-        required: true
-    },
-    ioType : {
-        type: String,
-        required: true
-    }
-});
+ "dependencies": {
+    "mqtt": "latest",
+    "mongoose": "latest"
+  }</textarea>
 
-module.exports = sensorSchema;
-      </textarea></div>
+      <ol>
 
-      <p>Save this code in the file <code>sensorSchema.js</code> in the <code>schema</code> directory.</p>
 
-      <h3>Build the Rest of the Models</h3>
+        <h2>Connect to the MQTT Broker and MongoDB</h2>
+        <p>Create a file called <code>server.js</code>.  This will be the main entry point into your edge-sensor-monitor.</p>
 
-      <p>Here are the rest of the fields for the other types. Please, define them in a similar manner to the <code>sensorSchema</code>.</p>
-      <li>
-        <p>Define an actuator schema in <code>schema/actuatorSchema.js</code></p>
-        <ul>
-          <li>id : String</li>
-          <li>name : String</li>
-          <li>description : String</li>
-          <li>maxfrequency : Number</li>
-          <li>active : Boolean</li>
-          <li>ioType String.</li>
-        </ul>
-      </li>
-
-      <li>
-        <p>Define sensor data schema in <code>schema/dataSchema.js</code></p>
-        <ul>
-          <li>sensor_id: String</li>
-          <li>value: Number</li>
-          <li>timestamp: Date</li>
-        </ul>
-      </li>
-
-      <li>
-        <p>Define a Trigger schema in <code>schema/dataSchema.js</code></p>
-        <ul>
-          <li>id: String. Holds a unique value for the iot network event</li>
-          <li>name: String. A name for the iot network event</li>
-          <li>sensor_id: String. A reference to the sensor that will trigger this event</li>
-          <li>actuator_id: String. A reference to the actuator that will be activated</li>
-          <li>condition: String. A JavaScript function that returns true or false</li>
-          <li>triggerFunc: String. A JavaScript function that is executed when the condition is true.</li>
-          <li>active: Boolean. If true this Iot Network Event can be triggered, otherwise it is inactive</li>
-        </ul>
-      </li>
-
-      <li>
-        <p>Define a schema for error in <code>schema/errorSchema.js</code></p>
-        <ul>
-          <li>type: String</li>
-          <li>message: String</li>
-          <li>timestamp: Date</li>
-        </ul>
-      </li>
-
-      <h2>Create a Module Interface for the Edge Network Objects</h2>
-      <p>In this section there are two goals.  First, we need to package these schemas into a JavaScript module that can be exported and used by other JavaScript Projects. Second, each schema object needs to be coverted into a Model object that can be used to access the database.</p>
-
-      <p>Write this code to <code>/index.js</code> at the root level of this project.</p>
-
+        <p>Now you can require the MQTT module and setup a connection to the MQTT broker.</p>
+        <p class="label">./server.js</p>
         <textarea id="code2" name="code">
+// Require MQTT and setup the connection to the broker
+var mqtt = require('mqtt');
+var mqttClient = mqtt.connect('mqtt://192.168.1.1');</textarea>
+
+        <p>Likewise, require the MongooseJS module and create a connection to the MongoDB server.</p>
+
+     <p class="label">./server.js</p>
+        <textarea id="code3" name="code">
+// Require the MongoDB libraries and connect to the database
 var mongoose = require('mongoose');
+mongoose.connect(config.mongodb.host);
+var db = mongoose.connection;
 
-var SensorSchema = require('./schema/sensorSchema.js');
-var ActuatorSchema = require('./schema/actuatorSchema.js');
-var TriggerSchema = require('./schema/triggerSchema.js');
-var DataSchema = require('./schema/dataSchema.js');
-var SensorCloudSchema = require('./schema/sensorCloudSchema.js');
-var ErrorSchema = require('./schema/errorSchema.js');
+// Report database errors to the console
+db.on('error', console.error.bind(console, 'connection error:'));
 
-module.exports = {
-    SensorModel: mongoose.model('SensorModel', SensorSchema),
-    ActuatorModel: mongoose.model('ActuatorModel', ActuatorSchema),
-    DataModel: mongoose.model('DataModel', DataSchema),
-    SensorCloudModel: mongoose.model('SensorCloudModel', SensorCloudSchema),
-    TriggerModel: mongoose.model('TriggerModel', TriggerSchema),
-    ErrorModel:  mongoose.model('ErrorModel', ErrorSchema)
-};
-      </textarea></div>
+// Log when a connection is established to the MongoDB server
+db.once('open', function (callback) {
+    console.log("Connection to MongoDB successful");
+});</textarea>
 
+        <p>Here we are also demonstrating binding a handler to two database events the <code>open</code> and <code>error</code> events.</p>
 
-      <h3>Additional resources</h3>
+        <p>Now import and initialize a sensor and a data model.</p>
+    <textarea id="code4" name="code">
+// Import the Database Model Objects
+var DataModel = require('intel-commerical-iot-database-models').DataModel;
+var SensorModel = require('intel-commerical-iot-database-models').SensorModel;
+</textarea>
 
-      <ul>
-        <li><a href="http://mongoosejs.com/docs/guide.html">http://mongoosejs.com/docs/guide.html</a></li>
-      </ul>
+        <h2>The MQTT Event Loop</h2>
+        <ol>
+          <li>
+            <p>Just as you did in the <a href="/edge_devices/sensors/index.html">Publishing Sensor Data Lab</a> create a handler for the MQTT <code>connect</code> event.  In this event handler subscribe to the following MQTT topics:</p>
 
-      <h2><a name="sensorMonitor">Write Edge Device Daemon</a></h2>
+            <ul>
+              <li><code>announcements</code></li>
+              <li><code>sensors/+/data</code></li>
+            </ul>
 
-      <p>The purpose of this daemon is to track edge network sensors and to record their data into the MongoDB database that you setup.</p>
+            <p>The <code>announcements</code> topic will publish messages about new sensors or actuators on the edge network.</p>
+            <p>Note the <code>+</code> sign in the second topic. This is a wildcard character that matches any alphanumeric string. In this case, we are using it where the sensor name would be.  This lets us receive data from all sensors on the edge network.</p>
+          </li>
+          <li>
 
-      <ol>
+            <p>The first topic will be published on if a new network sensor come online in the edge network.</p>
+            <p>Notice the second topic has a “+” in it.  This is a wildcard character, and it means that any alphanumeric sequence will match it.  For the purposes of the IoT network we are designing, a sensor’s unique id should go here. So that if we want to listen to the data from a particular sensor we can listen to a topic like “sensors/temperature/data” or if we want to listen to the data from all sensors we can listen to “sensors/+/data”.</p>
+          </li>
 
         <li>
-          <p>Write a NodeJS application that listens to two topics: "announcements" and “sensors/+/data”.</p>
-          <p>The first topic will be published on if a new network sensor come online in the edge network.</p>
-          <p>Notice the second topic has a “+” in it.  This is a wildcard character, and it means that any alphanumeric sequence will match it.  For the purposes of the IoT network we are designing, a sensor’s unique id should go here. So that if we want to listen to the data from a particular sensor we can listen to a topic like “sensors/temperature/data” or if we want to listen to the data from all sensors we can listen to “sensors/+/data”.</p>
-        </li>
+          <p>Next, write a handler for the MQTT <code>message</code> event.</p>
 
-        <li>
-          <p>When a new sensor or a new sensor value arrives, write it to the database.</p>
+  <textarea id="code5" name="code">
+// A function that runs when MQTT receives a message
+mqttClient.on('message', function (topic, message) {
+
+};</textarea>
+
+          <p>In this function do the implement the following steps:</p>
+
+          <ol>
+            <li>Parse the incoming message.</li>
+            <li>Decide whether it is a new piece of sensor data or a new announcement.</li>
+            <li>Create a data or sensor object from the DataModel or SensorModel</li>
+            <li>Write the new piece of data or new sensor to the database</li>
+            <li>Handle any database error by printing the error to the console</li>
+
         </li>
 
       </ol>
-
-
-      <h2><a name="sensors">Provision an Edge Sensor to the Network and Publish Sensor Data using MQTT</a></h2>
-
-      <p>In this exercise, you will write an MQTT server that publishes temperature data to the edge network.</p>
-
-      <p>Here are the steps in this exercise:</p>
-
-      <ol>
-        <li><p>Add the MQTT NPM package to the dependencies section of the <strong>package.json</strong> file.</p></li>
-        <li><p>Import the MQTT and the <strong>jsupm_grove</strong> packages with the <strong>require</strong> statement.</p></li>
-        <li><p>Initialize the temperature sensor.</p></li>
-        <li><p>Connect to the Mosquitto database.</p></li>
-        <li><p>Publish a sensor announcement.</p></li>
-        <li><p>Write an event handler that responses to the MQTT connect event.</p></li>
-        <li><p>Inside the event, write a <strong>setInterval</strong> function that publishes the sensor data.</p></li>
-      </ol>
-
 
       <h2>References</h2>
 
@@ -251,7 +157,7 @@ module.exports = {
     <script src="/js/codemirror.js"></script>
     <script src="/js/mode/javascript/javascript.js"></script>
     <script>
-      var editors = ["code1", "code2"]
+      var editors = ["code1", "code2", "code3", "code4", "code5"]
 
       for (i in editors) {
           console.log(editors[i]);
