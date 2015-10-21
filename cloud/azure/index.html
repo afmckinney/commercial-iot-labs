@@ -27,11 +27,11 @@
           <p>Install the <strong>azure-storage</strong> npm module into the gateway device using putty. Run:</p>
           <p><code>npm install azure-storage</code></p>
         </li>
-      
+
         <li>
           <p>Obtain the storage account details from the configuration file.</p>
         </li>
-      
+
       </ol>
 
       <h2>Establish a connection with Azure cloud</h2>
@@ -41,12 +41,12 @@
         <li>
           <p>Create a new JavaScript file named <span class="icon file">azure.js</span></p>
         </li>
-        
+
         <li>
           <p>Create a node reference variable for the module:</p>
           <p><code>var azureStorage = require('azure-storage');</code></p>
         </li>
-      
+
         <li>
           <p>Create a table service to establish a connection with the Azure storage account.</p>
           <p><code>var tableService = azureStorage.createTableService(accountName, accessKey);</code></p>
@@ -82,7 +82,7 @@
 
         <dt>RowKey</dt>
         <dd>Unique identifier for the entity within the partition</dd>
-        
+
       </dl>
 
       <p>Using <code>entityGenerator</code> to create entities.</p>
@@ -91,7 +91,9 @@
 
       <p>Table service supports a subset of data types defined by the <a href="http://www.odata.org/">OData Protocol Specification</a>. By default a property is created as type <code>String</code> if type is not specified.</p>
 
-<pre><code>var azureEntity = {
+<pre><code>var entGen = azureStorage.TableUtilities.entityGenerator;
+
+  var azureEntity = {
   PartitionKey : entGen.String(sensor_id),
   RowKey : entGen.String(timestamp.toString()),
   value : entGen.Double(value),
@@ -135,7 +137,7 @@ for(i in data) {
 <p></p>
 
 <pre><code>tableService.executeBatch(self.config.table, batch,
-    {echoContent: true}, 
+    {echoContent: true},
     function (error, result, response) {
       if(!error) {
         // Batch completed
@@ -182,7 +184,7 @@ for(i in data) {
   for (var propertyName in entity) {
     entity[propertyName] = entity[propertyName]["_"];
   }
-}); 
+});
 
 client.queryEntities(‘tableName’, {
   query: dataQuery,
