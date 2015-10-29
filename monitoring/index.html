@@ -73,7 +73,7 @@
       <h4>Exercises:</h4>
 
       <ol>
-        <li>Write a predicate function that tests if a light sensors has a value less than or equal 15 lumens.</li>
+        <li>Write a predicate function that tests if a light sensor has a value less than or equal 15 lumens.</li>
       <div>
         <textarea id="code2" name="code">
 (
@@ -84,13 +84,13 @@
 </textarea>
       </div>
 
-        <li>Write a predicate function that tests of a light sensors has a value greater than 15 lumens and temperature is greater than 27.</li>
+        <li>Write a predicate function that tests of a light sensor has a value greater than 15 lumens and temperature is greater than 27.</li>
 
       <div>
         <textarea id="code3" name="code">
 (
     function( light_temperature ) {
-      return (stash["light"] &gt; 15 &amp;&amp; stash[“temperature”] &gt;= 15;
+      return (stash["light"] &gt; 15 &amp;&amp; stash[“temperature”] &gt;= 27;
     }
 )        </textarea>
       </div>
@@ -144,8 +144,7 @@ temperature_too_cold = function() {
 var mongoose = require('mongoose');
 var http = require('http-request');
 var _ = require("lodash");
-var config = require("./config.json");
-</textarea>
+var config = require("./config.json");</textarea>
         </li>
 
       </ol>
@@ -165,8 +164,7 @@ var config = require("./config.json");
 },
 "mongodb" : {
   "uri" : "mongodb://192.168.1.1/iotdemo"
-}
-</textarea>
+}</textarea>
         </li>
 
       </ol>
@@ -190,8 +188,7 @@ self.triggers = [];
 
 // Holds the last value of each sensor and makes
 // the value available to the conditions and functions
-self.stash = [];
-</pre></code>
+self.stash = [];</textarea>
 
       <h3>Setup the MQTT and Mongoose DB connections</h3>
 
@@ -201,8 +198,7 @@ self.stash = [];
 var mqttClient  = mqtt.connect(self.config.mqtt.uri);
 
 // Connect to the MongoDB server
-var db = mongoose.createConnection(self.config.mongodb.uri);
-</textarea>
+var db = mongoose.createConnection(self.config.mongodb.uri);</textarea>
 
       <h3>Retrieve the IoT Event Triggers from the Database</h3>
 
@@ -223,8 +219,7 @@ TriggerModel.find({}, function (err, triggers) {
     });
     logger.trace(self.triggers);
   }
-});
-</textarea>
+});</textarea>
 
       <h3>Start the MQTT Event Loop</h3>
 
@@ -237,8 +232,7 @@ mqttClient.on('connect', function () {
   mqttClient.subscribe('trigger/refresh');
   mqttClient.subscribe('trigger/data');
   mqttClient.subscribe('sensors/+/data');
-});
-</textarea>
+});</textarea>
 
       <p>When a message is received then parse it and determine if it is a new sensor or if it is new sensor data.</p>
 
@@ -270,8 +264,7 @@ self.mqttClient.on('message', function (topic, message) {
 
 self.filter_triggers_by_sensor_id = function(id) {
   return _.filter(self.triggers, {sensor_id : id});
-};
-</textarea>
+};</textarea>
 
       <h3>Check the Predicate Function for each Trigger and Execute a Trigger Function if true</h3>
 
@@ -301,8 +294,7 @@ self.filter_triggers_by_sensor_id = function(id) {
         trigger.eval_triggerFunc(self);
       }
     });
-};
-</textarea>
+};</textarea>
 
       <div class="callout done has-goto-button">
         <p>Ready for the next module?</p>

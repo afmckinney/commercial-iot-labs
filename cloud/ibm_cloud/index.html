@@ -6,6 +6,9 @@
     <title>Intel® Commercial IoT Workshop</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/css/main.css">
+
+    <!-- Include CodeMirror CSS-->
+    <link rel="stylesheet" href="/css/codemirror.css">
   </head>
   <body>
     <header>
@@ -24,7 +27,7 @@
       <ol>
 
         <li>
-          <p>Log in to the Bluemix console. Visit <a href="https://console.ng.bluemix.net/">console.ng.bluemix.net</a> and select <strong>LOG IN</strong>.</p>
+          <p>Log in to the Bluemix console. Visit <a href="https://console.ng.bluemix.net/">console.ng.bluemix.net</a> and create a trial account.</p>
         </li>
 
         <li>
@@ -37,15 +40,15 @@
         </li>
 
         <li>
-          <p>Select <strong>WEB</strong>.</p>
+          <p>For the question, "What kind of app are you creating?" select <strong>WEB</strong>.</p>
         </li>
 
         <li>
-          <p>Select the <strong>SDK for Node.js</strong> option, then click <strong>CONTINUE</strong>.</p>
+          <p>For the question, "How do you want to get started?", select the <strong>SDK for Node.js</strong> option, then click <strong>CONTINUE</strong>.</p>
         </li>
 
         <li>
-          <p>Name your app…, then click <strong>FINISH</strong>.</p>
+          <p>Name your app and then click <strong>FINISH</strong>.</p>
         </li>
 
         <li>
@@ -57,9 +60,9 @@
           <p>In the "Data &amp; Analytics" section, select <strong>MongoLab</strong>.</p>
           <p><img src="image_2.png" alt="image alt text" /></p>
         </li>
-      
+
         <li>
-          <p>Click <strong>USE</strong> to confirm the creation of the service.</p>
+          <p>Click <strong>Create</strong> or <strong>USE</strong> to confirm the creation of the service.</p>
           <p><img src="image_3.png" alt="image alt text" /></p>
         </li>
 
@@ -67,25 +70,29 @@
           <p>After the service has been created, a popup window requesting to restage your application will appear. Click <strong>RESTAGE</strong>.</p>
           <p><img src="image_4.png" alt="image alt text" /></p>
         </li>
-      
+
         <li>
           <p>Wait for your application to finish staging. A message indicating that "Your app is running" will be displayed when done.</p>
         </li>
-      
+
       </ol>
 
       <h2>Set up your IBM Cloud development environment</h2>
 
-      <h3>Install MongoDB</h3>
+      <h3>Create a New Project</h3>
+      <p>Name the project anything that you like. For example, <code>IBMCloudApp1</code></p>
 
-      <ol>
 
-        <li>
-          <p>Install MongoDB into your gateway device using PuTTY. Run:</p>
-          <p><code>npm install mongodb</code></p>
-        </li>
+      <h3>Install the MongoDB NPM Module</h3>
 
-      </ol>
+      <p>Add the MongoDb module to the package.json file like shown below.</p>
+
+        <p class="label">./package.json</p>
+        <textarea id="code1" name="code">
+ "dependencies": {
+    "mongodb": "latest",
+  }</textarea>
+
 
       <h3>Create a MongoDB Client</h3>
 
@@ -93,15 +100,17 @@
         <li>
           <p>Create a folder named <code>mongodb</code>.</p>
         </li>
-        
+
         <li>
-          <p>Change to the directory mongodb and create a javascript file <code>index.js</code></p>
+          <p>Change to the directory mongodb and create a javascript file <span class="icon file"><code>index.js</code></span></p>
         </li>
-        
+
         <li>
           <p>Open <span class="icon file">index.js</span> file and create a node reference variable for the module and client object for establishing a database connection.</p>
-<pre><code>var mongodb = require('mongodb');
-var MongoClient = mongodb.MongoClient;</code></pre>
+          <p class="label">./index.js</p>
+          <textarea id="code2" name="code">
+var mongodb = require('mongodb');
+var MongoClient = mongodb.MongoClient;</textarea>
         </li>
 
       </ol>
@@ -114,38 +123,45 @@ var MongoClient = mongodb.MongoClient;</code></pre>
 
         <li>
           <p>Obtain the connection url from the Bluemix console.</p>
-          <p>From your application's dashboard, locate the <strong>MongoLab</strong> service then click <strong>Show Credentials</strong>.</p>
+          <p>From your application's dashboard, locate your application name in the left sidebar.  Click on your application and then locate the <strong>MongoLab</strong> service then click <strong>Show Credentials</strong>.</p>
           <p><img src="image_5.png" alt="image alt text" /></p>
         </li>
-      
+
         <li>
           <p>Copy the <strong>uri</strong> string under <strong>mongolab > credentials</strong>.</p>
           <p><img src="image_6.png" alt="image alt text" /></p>
         </li>
-      
+
         <li>
           <p>Pass the uri to the connect function, api provided by the mongodb node package.</p>
-          <p><code>db = MongoClient.connect(uri, function(err, db) {});</code></p>
+          <p class="label">./index.js</p>
+          <textarea id="code3" name="code">var uri = "mongodb://IbmCloud_89ahaf4r_69dqqr96_dllp08f7:HJoouGHxhLpZN1ZSKf2NTDZOoIfG2I@ds043324.mongolab.com:43324/IbmCloud_89ahr_69dqqr96";
+
+db = MongoClient.connect(uri, function(err, db) {
+    if (err) {
+        console.log(err);
+    }
+});</textarea>
         </li>
-      
+
       </ol>
 
       <h3>Store data in IBM MongoDB</h3>
 
       <p>Data can be stored as JSON objects or an array of JSON objects. In this demo, we are storing the sensor data with sensor id, value and timestamp fields.</p>
 
-      <p>For example:</p>
-
-<pre><code>data = {‘sensor-id’ : ‘sens341’, ‘value’ : 65.5, ‘timestamp’: }
+<p class="label">./index.js</p>
+          <textarea id="code4" name="code">data = {"sensor-id" : "sens341", "value" : 65.5, "timestamp": Date.now() };
 
 db = MongoClient.connect(config.url, function(err, db) {
-  collection = db.collection(config.db);
-  collection.insert(data, function(err, result) {});
-});</code></pre>
+     collection = db.collection(config.db);
+     collection.insert(data, function(err, result) {});
+});</textarea>
 
-      <h3>Query Data</h3>
 
-      <h4>Timestamp based query</h4>
+          <h3>Query Data</h3>
+
+          <h4>Timestamp based query</h4>
 
       <p><code>dataQuery = { "timestamp": { $gt: readQuery.timestamp } };</code></p>
 
@@ -155,12 +171,12 @@ db = MongoClient.connect(config.url, function(err, db) {
 
       <h4>Run query</h4>
 
-<pre><code>collection = db.collection(self.config.db);
-collection.find(dataQuery).toArray( function(err, items) {
-  if(!err)
-    console.log(JSON.stringify(items, null, '  '));
-});
-</code></pre>
+      <pre><code>collection = db.collection(self.config.db);
+          collection.find(dataQuery).toArray( function(err, items) {
+          if(!err)
+          console.log(JSON.stringify(items, null, '  '));
+          });
+      </code></pre>
 
       <h2>Additional resources</h2>
 
@@ -176,5 +192,20 @@ collection.find(dataQuery).toArray( function(err, items) {
 
 
     </div><!-- end .content -->
+    <script src="/js/codemirror.js"></script>
+    <script src="/js/mode/javascript/javascript.js"></script>
+    <script>
+      var editors = ["code1", "code2", "code3", "code4", "code5"]
+
+      for (i in editors) {
+          console.log(editors[i]);
+          CodeMirror.fromTextArea(document.getElementById(editors[i]), {
+              lineNumbers: true,
+              matchBrackets: true,
+              continueComments: "Enter",
+              extraKeys: {"Ctrl-Q": "toggleComment"}
+          });
+      };
+    </script>
   </body>
 </html>

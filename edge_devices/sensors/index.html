@@ -88,7 +88,8 @@ var announcement = {
      "active" : true,
      "ioType" : "analog"
 }
-        </textarea></li>
+
+client.publish('announcements', JSON.stringify(announcement));</textarea></li>
 
         <li><p>Inside the event, write a <strong>setInterval</strong> function that publishes the sensor data.  The setInterval function is NodeJS function that lets you call a function on a timed interval. See <a href="https://nodejs.org/api/timers.html">Timers Node.js v4.1.1 Manual & Documentation</a> for more information on setInterval</p>
 
@@ -126,17 +127,20 @@ var sensorData = {
     <script src="/js/codemirror.js"></script>
     <script src="/js/mode/javascript/javascript.js"></script>
     <script>
-      var editors = ["code1", "code2", "code3", "code4", "code5"]
+      for (i=1; i<14; i++) {
+          console.log("code" + i);
+          var element = document.getElementById("code" + i);
 
-      for (i in editors) {
-          console.log(editors[i]);
-          CodeMirror.fromTextArea(document.getElementById(editors[i]), {
+          if (element == null) { continue; }
+
+          CodeMirror.fromTextArea(element, {
               lineNumbers: true,
               matchBrackets: true,
               continueComments: "Enter",
               extraKeys: {"Ctrl-Q": "toggleComment"}
           });
       };
-    </script>
+
+
   </body>
 </html>
