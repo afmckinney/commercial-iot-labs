@@ -6,7 +6,10 @@
     <title>Intel® Commercial IoT Workshop</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/css/main.css">
-  </head>
+
+    <!-- Include CodeMirror CSS-->
+    <link rel="stylesheet" href="/css/codemirror.css">
+ </head>
   <body>
     <header>
       <a href="/index.html"><img src="/img/intel_logo.png" alt="Intel® logo" width="52" height="35"></a>
@@ -31,7 +34,8 @@
 
         <li>
           <p>Your <span class="icon file">main.js</span> (running on the Intel® Edison) from <span class="icon bookmark">Temperature Sensor and LCD</span> should look like this:</p>
-<pre><code>// Include the JavaScript UPM libraries
+<p class="label">./temperature/main.js</p>
+<textarea id="code1" class="code">// Include the JavaScript UPM libraries
 var groveSensor = require('jsupm_grove');
 var LCD = require("jsupm_i2clcd");
 
@@ -43,12 +47,12 @@ var screen = new LCD.Jhd1313m1(6, 0x3E, 0x62);
 
 function monitor() {
     setInterval(function() {
-      
+
         // Read the temperature sensor
         var celsius = temp.value();
         var fahrenheit = Math.round(celsius * 9.0/5.0 + 32.0);
         console.log(celsius + "° Celsius, or " + fahrenheit + "° Fahrenheit");
-        
+
         // Update the LCD screen
         screen.setCursor(0, 0);
         screen.setColor(255, 255, 255);
@@ -57,8 +61,8 @@ function monitor() {
     }, 1000);
 }
 
-monitor();
-</code></pre>
+monitor();</textarea>
+
         </li>
 
       </ol>
@@ -71,15 +75,13 @@ monitor();
 
         <li>
           <p>In your Intel XDK project, open <span class="icon file">package.json</span> and locate the <code>dependencies</code> configuration.</p>
-<pre><code>  "dependencies": {
-  }</code></pre>
         </li>
 
         <li>
           <p>Add the <code>bleno</code> NodeJS module to the dependencies list.</p>
-<pre><code class="highlight-diff">  "dependencies": {
+<textarea id="code2" class="code">  "dependencies": {
     <strong>"bleno":"*"</strong>
-  }</code></pre>
+  }</textarea>
         </li>
 
         <li>
@@ -210,13 +212,13 @@ function TemperatureReadCharacteristic(){
 
 function monitor() {
     setInterval(function() {
-      
+
         // Read the temperature sensor
         <strike>var celsius = temp.value();</strike>
         <strong>celsius = temp.value();</strong>
         var fahrenheit = Math.round(celsius * 9.0/5.0 + 32.0);
         console.log(celsius + "° Celsius, or " + fahrenheit + "° Fahrenheit");
-        
+
         // Update the LCD screen
         screen.setCursor(0, 0);
         screen.setColor(255, 255, 255);
@@ -234,12 +236,12 @@ monitor();
           <p>The callback function for the <code>stateChange</code> event implements a <code>setInterval()</code> so remove the <code>monitor();</code> statement and the <code>setInterval()</code> from <code>monitor()</code>.</p>
 <pre><code class="highlight-diff">function monitor() {
     <strike>setInterval(function() {</strike>
-      
+
         // Read the temperature sensor
         celsius = temp.value();
         var fahrenheit = Math.round(celsius * 9.0/5.0 + 32.0);
         console.log(celsius + "° Celsius, or " + fahrenheit + "° Fahrenheit");
-        
+
         // Update the LCD screen
         screen.setCursor(0, 0);
         screen.setColor(255, 255, 255);
@@ -340,11 +342,11 @@ var TemperatureCharacteristic = null;
             clearInterval(readTemperature);
             console.log(error);
         }
-    });    
+    });
     TemperatureCharacteristic.once('read', function(value) {
         var celsius = value.readUInt8(0);
         console.log ('Temperature is '  + celsius + '°C');
-  }); 
+  });
 }
 </code></pre>
           <p>Note that the buffer offset position is the <strong>same</strong> as the buffer position used in the peripheral code. If you recall, you used <code>buffer.writeUInt8(celsius,0);</code> on the Intel® Edison.</p>
@@ -360,9 +362,9 @@ var TemperatureCharacteristic = null;
                 if (characteristics[i].uuid === Characteristic_UUID){
                     TemperatureCharacteristic = characteristics[i];
                     setInterval(readTemperature,1000);
-                    break;  
+                    break;
                 }
-            }     
+            }
         });
     });
 }
@@ -387,7 +389,7 @@ noble.on('discover', function(peripheral) {
             if(error){
                 console.log(error);
                 return;
-            } 
+            }
             peripheral.discoverServices([], function(error, services){
                 console.log(services.length, ' services discovered');
                     for (var i = 0, l = services.length; i &lt; l; i++ ){
@@ -397,10 +399,10 @@ noble.on('discover', function(peripheral) {
                             console.log('Specific service found: ', service.uuid);
                             handleService(service);
                         }
-                    } 
+                    }
                 });
          });
-    }    
+    }
 });
 
 noble.on('disconnect', function() {
@@ -408,7 +410,7 @@ noble.on('disconnect', function() {
     noble.startScanning();
 });
 </code></pre>
-          <p>The <code>discover</code> event handler is what looks for the <code>'temperature'</code> service in order to call <code>handleService()</code> when there's a matching service found.</p> 
+          <p>The <code>discover</code> event handler is what looks for the <code>'temperature'</code> service in order to call <code>handleService()</code> when there's a matching service found.</p>
         </li>
 
         <li>
@@ -444,5 +446,24 @@ noble.on('disconnect', function() {
 
 
     </div><!-- end .content -->
-  </body>
+
+    <script src="/js/codemirror.js"></script>
+    <script src="/js/mode/javascript/javascript.js"></script>
+    <script>
+      for (i=1; i<24; i++) {
+          console.log("code" + i);
+          var element = document.getElementById("code" + i);
+
+          if (element == null) { continue; }
+
+          CodeMirror.fromTextArea(element, {
+              lineNumbers: true,
+              matchBrackets: true,
+              continueComments: "Enter",
+              extraKeys: {"Ctrl-Q": "toggleComment"}
+          });
+      };
+    </script>
+
+</body>
 </html>

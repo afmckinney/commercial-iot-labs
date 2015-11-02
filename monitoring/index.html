@@ -171,12 +171,6 @@ var config = require("./config.json");</textarea>
 
       <p>By default, the IP address of your gateway on the edge network is 192.168.1.1.</p>
 
-      <h3>Import the Logger</h3>
-
-      <p>This is the logger that you created in the Module 3.  Simply copy and paste:</p>
-
-<textarea id="code7" name="code">var logger = require('./logger.js');</textarea>
-
       <h3>Set Up Two Important Arrays</h3>
 
       <p>Next we will define two arrays. One array will hold all of the triggers and the second will be treated as an associative array and hold the name of the each sensor and its last published value.</p>
@@ -266,9 +260,41 @@ self.filter_triggers_by_sensor_id = function(id) {
   return _.filter(self.triggers, {sensor_id : id});
 };</textarea>
 
+<h3>Helper Functions for the Triggers</h3>
+
+The Trigger Model is more than simply a JavaScript object that can access the MongoDB.  It can also hold methods that operate on the database model.  We are going to implement two methods.
+
+<ul>
+  <li><code>eval_condition(context, args)</code> - Runs a triggers' conditional function.  The values in context are assigned to the <code>this</code> object. The <code>args</code> are passed into the conditional function. </li>
+  <li><code>eval_trigger()(context, args)</code> - Runs a trigger's action. The <code>context</code> and <code>args</code> are the same as in the <code>eval_condition</code></li>
+</ul>
+
+<p class="label">./schemas/triggerSchema.js</p>
+<textarea id="code13" name="code">
+triggerSchema.methods.eval_condition = function (scope, args) {
+    var result;
+
+    try {
+        result = eval(this.condition).call(scope, args);
+    } catch(e) {
+        throw(e);
+    }
+    return result;
+};
+
+triggerSchema.methods.eval_triggerFunc = function (scope, args) {
+    var result;
+    try {
+        result = eval(this.triggerFunc).call(scope, args);
+    } catch(e) {
+        throw(e);
+    }
+    return result;
+};</textarea>
+
       <h3>Check the Predicate Function for each Trigger and Execute a Trigger Function if true</h3>
 
-<textarea id="code13" name="code">self.processSensorData = function(json) {
+<textarea id="code14" name="code">self.processSensorData = function(json) {
   var sensor_id = json.sensor_id;
   var value = json.value;
 
@@ -296,6 +322,12 @@ self.filter_triggers_by_sensor_id = function(id) {
     });
 };</textarea>
 
+<p>Continue to experiment and to tweak you Conditional Based Monitoring System, but congratulations, you can run rules that will automate an IoT edge network. Now we are going to practice building more complex triggers.</p>
+
+<h2>More Triggers</h2>
+
+<p>Now that the Conditional Based Monitoring System is finished.  We will write rules that implement the temperature controlled room.</p>
+
       <div class="callout done has-goto-button">
         <p>Ready for the next module?</p>
         <p><a href="../index.html#done-module-monitoring" class="link-button centered">Go to next module »</a></p>
@@ -306,7 +338,7 @@ self.filter_triggers_by_sensor_id = function(id) {
     <script src="/js/codemirror.js"></script>
     <script src="/js/mode/javascript/javascript.js"></script>
     <script>
-      for (i=1; i<14; i++) {
+      for (i=1; i<24; i++) {
           console.log("code" + i);
           var element = document.getElementById("code" + i);
 
