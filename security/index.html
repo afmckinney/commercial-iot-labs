@@ -252,21 +252,7 @@ Hello, World</code></pre>
 
       </ol>
 
-      <h2>4. Using MEC Updaters</h2>
-
-      <p>In this section you will use MEC updaters to maintain a whitelist.</p>
-
-      <p>Some MEC-authorized programs may frequently update software components on your system automatically.  You can add such programs as updaters, so MEC authorizes them to update the software components.  Updaters bypass the MEC <strong>deny-exec</strong>, <strong>script-auth</strong>, <strong>deny-write</strong> and <strong>deny-read</strong> components to reconcile the changes in the whitelist.</p>
-
-      <ol>
-        <li>
-          <p>Run the following command to add /root/test_script.sh to the updater then verify that test_script.sh is added</p>
-          <p><img src="image_12.png" alt="image alt text" /></p>
-          <p>This time the response indicates the test_script.sh executed without error.</p>
-        </li>
-      </ol>
-
-      <h2>5. Verifying MEC Write/Read Protection</h2>
+      <h2>4. Verifying MEC Write/Read Protection</h2>
 
       <p>In this section you will implement write and read protection to the file /root/test_script.sh</p>
 
@@ -324,7 +310,7 @@ Hello, World</code></pre>
 
       </ol>
 
-      <h2>6. Using the Update Mode</h2>
+      <h2>5. Using the Update Mode</h2>
 
       <p>In this section you will use MEC update mode to update the file /root/test_script.sh which is write and read protected.</p>
 
