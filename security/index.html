@@ -66,7 +66,7 @@ solidcores3-6.6.0_145-r0.0.intel_baytrail_64
 
         <li>
           <p>Execute the following command to review the list of all application control features and their status (enabled or disabled).</p>
-          <p><code>sadmin features -d</code></p>
+          <p><code>sadmin features</code></p>
           <p><img src="image_1.png" alt="image alt text" /></p>
           <p>Note the following aspect of the MEC features:</p>
           <ul>
@@ -75,7 +75,7 @@ solidcores3-6.6.0_145-r0.0.intel_baytrail_64
             <li><p>The feature <strong>deny-write</strong> providers tamper-proofing to protect data file ( for example configuration file).  Unlike the deny-exec and script-auth features (which rely on a whitelist), the deny-write feature is rules-based.  The MEC configuration file (solidcore.conf) records the rules.</p></li>
             <li><p>The feature <strong>deny-read</strong> provides tamper-proofing to prevent reading of critical files.  The feature <strong>deny-read</strong> is alos rule based (like deny-write) - The MEC configuration file (solidcore.conf) records the rules.  The feature is disabled by default.</p></li>
             <li><p>The feature <strong>integrity</strong> protects MEC data and file from modification , renaming or deletion.</p></li>
-          </ul>    
+          </ul>
         </li>
 
         <li>
@@ -171,7 +171,7 @@ solidcores3-6.6.0_145-r0.0.intel_baytrail_64
           <p>As the MEC administrator, execute the following command to confirm that MEC created the initial whitelist.  The application control component stores a whitelist for each volume at volume<strong>/.solidcore/scinv</strong></p>
           <p><img src="image_4.png" alt="image alt text" /></p>
         </li>
-        
+
         <li>
           <p>Execute the following command to check the status of McAfee embedded control.</p>
           <p><img src="image_5.png" alt="image alt text" /></p>
@@ -184,12 +184,12 @@ solidcores3-6.6.0_145-r0.0.intel_baytrail_64
           <p>McAfee Solidifier will be enabled on service restart.</p>
           <p><img src="image_6.png" alt="image alt text" /></p>
         </li>
-        
+
         <li>
           <p>As the MEC admin, execute this command to restart the McAfee service</p>
           <p><code>systemctl restart scsrvc</code></p>
         </li>
-        
+
         <li>
           <p>Execute the following command to verify that MEC is enabled.</p>
           <p><code>sadmin status</code></p>
