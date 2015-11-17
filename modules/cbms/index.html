@@ -50,7 +50,7 @@
         <li><p>Create a new NPM package named "trigger-daemon"</p></li>
         <li><p>Create a NodeJS server that listens to all sensor based data</p></li>
         <li><p>Reads in the triggers from the MongoDB. We will store the triggers in the Mongo database so that they can be remotely added from the administration interface.</p></li>
-s        <li><p>Compare sensor data to the condition function of each trigger</p></li>
+        <li><p>Compare sensor data to the condition function of each trigger</p></li>
         <li><p>If a comparison function evaluates to true then execute the trigger function.</p></li>
       </ul>
 
@@ -194,6 +194,8 @@ db.once('open', function (callback) {
 });</textarea>
 
 
+<h3>Set Up Two Important Arrays</h3>
+
 <h3>Set Up a Context Object for the Triggers</h3>
 <p>When the Condition Based Monitoring System evaluates a trigger's condition and action functions, it runs them in a context that we can define.</p>
 <p>This context object is passed into the function that evaluates the trigger's conditional and action function. Any JavaScript Array or object stored in the context below will be accessable in the triggers' functions through the "this" object. For example, if you add <code>http</code> to the context below it will be accessible through <code>this.http</code> in the trigger.</p>
@@ -275,6 +277,39 @@ var isRefreshTopic = function(str) {
 
 var filter_triggers_by_sensor_id = function(id) {
     return _.filter(context.triggers, {sensor_id : id});
+};</textarea>
+
+
+<h3>Helper Functions for the Triggers</h3>
+
+The Trigger Model is more than simply a JavaScript object that can access the MongoDB.  It can also hold methods that operate on the database model.  We are going to implement two methods.
+
+<ul>
+  <li><code>eval_condition(context, args)</code> - Runs a triggers' conditional function.  The values in context are assigned to the <code>this</code> object. The <code>args</code> are passed into the conditional function. </li>
+  <li><code>eval_trigger()(context, args)</code> - Runs a trigger's action. The <code>context</code> and <code>args</code> are the same as in the <code>eval_condition</code></li>
+</ul>
+
+<p class="label">./schemas/triggerSchema.js</p>
+<textarea id="code13" name="code">
+triggerSchema.methods.eval_condition = function (scope, args) {
+    var result;
+
+    try {
+        result = eval(this.condition).call(scope, args);
+    } catch(e) {
+        throw(e);
+    }
+    return result;
+};
+
+triggerSchema.methods.eval_triggerFunc = function (scope, args) {
+    var result;
+    try {
+        result = eval(this.triggerFunc).call(scope, args);
+    } catch(e) {
+        throw(e);
+    }
+    return result;
 };</textarea>
 
 <h3>Define the On Message Callback Function</h3>
