@@ -75,8 +75,9 @@
 
         <li>
           <p>The Intel Iot Gateway is enabled with <strong>grsecurity</strong> which by default prevents the execution of processes that are not added to a white list.</p>
-          <p>Add the MongoDM daemon (<code>mongod</code>) to the whitelist type:</p>
+          <p>Add the MongoDB daemon (<code>mongod</code>)and the Mongo Client (<code>mongo</code>) to the whitelist type:</p>
           <pre><code>$ paxctl -Cm /usr/bin/mongod</code></pre>
+          <pre><code>$ paxctl -Cm /usr/bin/mongo</code></pre>
         </li>
 
         <li>
@@ -85,9 +86,12 @@
           <pre><code>$ mkdir -p /data/db</code></pre>
           <pre><code>$ mount /dev/sda3 /data/db</code></pre>
         </li>
+	<li>
+	  <p class="warning callout">Some of the Gateways may have mounted <b style="display:inline">/dev/sda3</b> as <b>/mnt/space</b> if this is the case then remount the partition as <b>/data/db</b>.
+	</li>
 
         <li>
-          <p>Start the MongoDM daemon using the <code>mongod</code> command:</p>
+          <p>Start the MongoDB daemon using the <code>mongod</code> command:</p>
           <pre><code>$ mongod</code></pre>
         </li>
 

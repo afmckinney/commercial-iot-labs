@@ -193,9 +193,6 @@ db.once('open', function (callback) {
     console.log("Connection to MongoDB successful");
 });</textarea>
 
-
-<h3>Set Up Two Important Arrays</h3>
-
 <h3>Set Up a Context Object for the Triggers</h3>
 <p>When the Condition Based Monitoring System evaluates a trigger's condition and action functions, it runs them in a context that we can define.</p>
 <p>This context object is passed into the function that evaluates the trigger's conditional and action function. Any JavaScript Array or object stored in the context below will be accessable in the triggers' functions through the "this" object. For example, if you add <code>http</code> to the context below it will be accessible through <code>this.http</code> in the trigger.</p>
@@ -318,7 +315,7 @@ triggerSchema.methods.eval_triggerFunc = function (scope, args) {
 
 <p>The second type of message is a trigger refresh message and is received on the MQTT topic 'triggers/refresh'</p>
 
-<textarea id="code13" name="code">// Every time a new message is received, do the following
+<textarea id="code23" name="code">// Every time a new message is received, do the following
 mqttClient.on('message', function (topic, message) {
     console.log(topic + ":" + message.toString());
     var json;
@@ -378,6 +375,8 @@ mqttClient.on('message', function (topic, message) {
 <!-- TODO: The trigger eval condition and eval action Functions -->
 <!-- TODO: Write a better practice triggers section.  too_hot_condition  too_cold_condition -->
 
+<h2>Spend some time and Creating Your Own Triggers</h2>
+<p>Remember that triggers can contain computationally expensive operations.  For example, you can complex calculations, map-reduce operations and accessing of externals network services.</p>
 
       <div class="callout done has-goto-button">
         <p>Ready for the next module?</p>
@@ -388,7 +387,7 @@ mqttClient.on('message', function (topic, message) {
     <script src="/js/codemirror.js"></script>
     <script src="/js/mode/javascript/javascript.js"></script>
     <script>
-      for (i=1; i<16; i++) {
+      for (i=1; i<25; i++) {
           console.log("code" + i);
           var element = document.getElementById("code" + i);
 
